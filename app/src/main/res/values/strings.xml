@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">FormCovid19</string>
+    <string-array name="motivele_deplasarii">
+        <item>1. interes profesional, inclusiv între locuință/gospodărie și locul/locurile de desfășurare a activității profesionale și înapoi;</item>
+        <item>2. asigurarea de bunuri care acoperă necesitățile de bază ale persoanelor și animalelor de companie/domestice;</item>
+        <item>3. asistență medicală care nu poate fi amânată și nici realizată de la distanță;</item>
+        <item>4. motive justificate, precum îngrijirea/ însoțirea unui minor/copilului, asistența persoanelor vârstnice, bolnave sau cu dizabilități ori deces al unui membru de familie;</item>
+        <item>5. activitate fizică individuală (cu excluderea oricăror activități sportive de echipă/ colective) sau pentru nevoile animalelor de companie/domestice, în apropierea locuințeideplasare scurtă, lângă domiciliu, pentru desfășurarea de activități fizice individuale, în aer liber, cu excluderea oricărei forme de activitate sportivă colectivă;</item>
+        <item>6. realizarea de activități agricole;</item>
+        <item>7. donarea de sânge, la centrele de transfuzie sanguină;</item>
+        <item>8. scopuri umanitare sau de voluntariat;</item>
+        <item>9. comercializarea de produse agroalimentare (în cazul producătorilor agricoli)</item>
+        <item>10. asigurarea de bunuri necesare desfășurării activității profesionale.</item>
+    </string-array>
+</resources>
