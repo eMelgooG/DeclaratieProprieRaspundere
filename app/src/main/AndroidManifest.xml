@@ -23,7 +23,7 @@
             android:name="androidx.core.content.FileProvider">
 
             <meta-data
-                android:name="android.support.FILE_PROVIDE_PATHS"
+                android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths"/>
 
         </provider>
