@@ -1,48 +1,48 @@
 package com.example.formcovid19;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
-import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
-
 import com.google.android.material.textfield.TextInputLayout;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.PermissionListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-
 
 public class MainActivity extends AppCompatActivity {
+
+    //Properties
     TextInputLayout dataTF;
-     Button motiveDeplasareButon;
+     Button motiveDeplasareButon, generarePdfButon;
      private DatePickerDialog.OnDateSetListener mBirthDateSetListener;
      String[] listaMotive;
      boolean[] checkedItems;
     SimpleDateFormat dataFormat = new SimpleDateFormat("dd/MM/yyyy"); //default: data de azi
     Calendar c = Calendar.getInstance();
      ArrayList<Integer> listUserMotive = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Initialize Views
         motiveDeplasareButon=findViewById(R.id.motiveleDeplasariiButon);
+        generarePdfButon = findViewById(R.id.geneatePdfButon);
         dataTF = findViewById(R.id.dataTF);
 
         // Initialize vaiables
@@ -53,6 +53,31 @@ public class MainActivity extends AppCompatActivity {
         dataTF.getEditText().setText(dataFormat.format(c.getTime()));
 
         //Listeners
+        Dexter.withActivity(this)
+                .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .withListener(new PermissionListener() {
+                    @Override
+                    public void onPermissionGranted(PermissionGrantedResponse response) {
+                        generarePdfButon.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onPermissionDenied(PermissionDeniedResponse response) {
+
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+
+                    }
+                })
+                .check();
+
+        //Afisarea iconiteti cu calendar din text field-ul 'Data' si afisarea calendarului
         dataTF.setEndIconOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
