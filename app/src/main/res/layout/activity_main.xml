@@ -11,7 +11,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/numPrenumeTF"
-        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_regular_textfield"
@@ -25,9 +25,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <AutoCompleteTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:imeOptions="flagNoExtractUi"
             android:inputType="textCapWords|textShortMessage"
             />
 
@@ -71,7 +72,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:imeOptions="actionNext"
+            android:imeOptions="actionNext|flagNoExtractUi"
             android:textAlignment="center"
             android:digits="0123456789"
             android:inputType="number"
@@ -98,7 +99,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
-            android:imeOptions="actionNext"
+            android:imeOptions="actionNext|flagNoExtractUi"
             android:digits="0123456789"
             android:inputType="number"
             android:hint="Lună"
@@ -124,7 +125,7 @@
             android:layout_height="wrap_content"
             android:digits="0123456789"
             android:inputType="number"
-            android:imeOptions="actionNext"
+            android:imeOptions="actionNext|flagNoExtractUi"
             android:maxLength="4"
             android:textAlignment="center"
             android:hint="An"/>
@@ -150,6 +151,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:imeOptions="flagNoExtractUi"
             android:inputType="textShortMessage|textCapSentences"
             />
     </com.google.android.material.textfield.TextInputLayout>
@@ -173,6 +175,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:imeOptions="flagNoExtractUi"
             android:inputType="textShortMessage|textCapSentences"
             />
     </com.google.android.material.textfield.TextInputLayout>
@@ -191,13 +194,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/motiveleDeplasariiButon"
-android:layout_marginTop="16dp"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_marginTop="16dp"
+        app:icon="@drawable/ic_add_24dp"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Alege motivele deplasării:"
+        android:text="Alege motivele deplasării"
         app:layout_constraintStart_toStartOf="@+id/deplasareTF"
         app:layout_constraintTop_toBottomOf="@id/deplasareTF" />
 
@@ -225,6 +229,7 @@ android:layout_marginTop="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLength="10"
+            android:imeOptions="flagNoExtractUi"
             android:inputType="date"
             />
     </com.google.android.material.textfield.TextInputLayout>
@@ -233,7 +238,8 @@ android:layout_marginTop="16dp"
         android:id="@+id/geneatePdfButon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Geneate PDF"
+        style="@style/Widget.MaterialComponents.Button"
+        android:text="Generează PDF"
         app:layout_constraintStart_toStartOf="@+id/dataTF"
         app:layout_constraintTop_toBottomOf="@id/dataTF" />
 </androidx.constraintlayout.widget.ConstraintLayout>
