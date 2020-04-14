@@ -1,5 +1,6 @@
 package com.example.formcovid19;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
@@ -18,9 +19,11 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.Editable;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -61,8 +64,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String HELPER_FINAL_PDF = "Persoanele care au împlinit vârsta de 65 de ani completează doar pentru motivele prevăzute în cămpurile 1-6, deplasarea fiind permisă zilnic doar în intervalul orar 11.00 - 13.00.";
     private static final String LOCUL_DEPLASARII_PDF = "Locul/locurile deplasării: ";
     private static final String MOTIVUL_PDF = "Motivul/motivele deplasării: ";
-    private static final String DATA_PDF = "Data:";
-    private static final String SEMNATURA_PDF = "Semnătura:";
+    private static final String DATA_PDF = "Data";
+    private static final String SEMNATURA_PDF = "Semnătura";
     private static final String positiveCheckbox = "(x) ";
     private static final String negativeCheckbox = "( ) ";
 
@@ -106,11 +109,21 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize vaiables
         listaMotive = getResources().getStringArray(R.array.motivele_deplasarii);
-        checkedItems = new boolean[listaMotive.length];
 
-        //Initializare data de azi
-        dataTF.getEditText().setText(dataFormat.format(c.getTime()));
-
+        if(savedInstanceState!=null) {
+            numeTextInput.getEditText().setText(savedInstanceState.getString("nume"));
+            ziuaNasteriiTextInput.getEditText().setText(savedInstanceState.getString("zi"));
+            lunaNasteriiTextInput.getEditText().setText(savedInstanceState.getString("luna"));
+            anulNasteriiTextInput.getEditText().setText(savedInstanceState.getString("an"));
+            adresaLocuinteiTextInput.getEditText().setText(savedInstanceState.getString("adresa"));
+            locurileDeplasariiTextInput.getEditText().setText(savedInstanceState.getString("locuri"));
+            checkedItems = savedInstanceState.getBooleanArray("motive");
+            dataTextInput.getEditText().setText(savedInstanceState.getString("data"));
+        } else {
+            checkedItems = new boolean[listaMotive.length];
+            //Initializare data de azi
+            dataTF.getEditText().setText(dataFormat.format(c.getTime()));
+        }
         //Listeners
         Dexter.withActivity(this)
                 .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -120,7 +133,6 @@ public class MainActivity extends AppCompatActivity {
                         generarePdfButon.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-
                                 String nume = numeTextInput.getEditText().getText().toString();
                                 String dataNasterii = ziuaNasteriiTextInput.getEditText().getText().toString() + "/" +
                                         lunaNasteriiTextInput.getEditText().getText().toString() + "/" +
@@ -246,7 +258,68 @@ public class MainActivity extends AppCompatActivity {
         }
 
     });
+
+        //Zi nastere editText
+        ziuaNasteriiTextInput.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(ziuaNasteriiTextInput.getEditText().getText().toString().length()==2){
+                    if(ziuaNasteriiTextInput.getEditText().getSelectionEnd()==2)
+                    lunaNasteriiTextInput.getEditText().requestFocus();
+                }
+            }
+        });
+
+        lunaNasteriiTextInput.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (lunaNasteriiTextInput.getEditText().getText().toString().length() == 2) {
+                    if (lunaNasteriiTextInput.getEditText().getSelectionEnd() == 2)
+                        anulNasteriiTextInput.getEditText().requestFocus();
+                }
+            }
+        });
+
+        anulNasteriiTextInput.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(anulNasteriiTextInput.getEditText().getText().toString().length()==4) {
+                    if(anulNasteriiTextInput.getEditText().getSelectionEnd()==4)
+                        adresaLocuinteiTextInput.requestFocus();
+                }
+            }
+        });
     }
+
 
 
     private boolean generatePdf(String name, String birthDate, String address, String placesToGo, String date) {
@@ -420,4 +493,17 @@ public class MainActivity extends AppCompatActivity {
         return motive.toString();
     }
 
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("nume",numeTextInput.getEditText().getText().toString());
+        outState.putString("zi",ziuaNasteriiTextInput.getEditText().getText().toString());
+        outState.putString("luna",lunaNasteriiTextInput.getEditText().getText().toString());
+        outState.putString("an",anulNasteriiTextInput.getEditText().getText().toString());
+        outState.putString("adresa",adresaLocuinteiTextInput.getEditText().getText().toString());
+        outState.putString("locuri",locurileDeplasariiTextInput.getEditText().getText().toString());
+        outState.putBooleanArray("motive",checkedItems);
+        outState.putString("data",dataTF.getEditText().getText().toString());
+
+    }
 }
