@@ -9,8 +9,11 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Typeface;
@@ -33,6 +36,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CheckedTextView;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -51,6 +55,7 @@ import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     //Constants
@@ -79,9 +84,11 @@ public class MainActivity extends AppCompatActivity {
     TextInputLayout dataTextInput;
 
 
+    public static Bitmap bm = null;
     //Properties
+    SharedPreferences sharedPreferences;
     TextInputLayout dataTF;
-     Button motiveDeplasareButon, generarePdfButon;
+     Button motiveDeplasareButon, generarePdfButon,semnaturaButon;
      private DatePickerDialog.OnDateSetListener mBirthDateSetListener;
      String[] listaMotive;
      boolean[] checkedItems;
@@ -92,6 +99,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+         sharedPreferences = this.getSharedPreferences("com.example.formcovid19", Context.MODE_PRIVATE);
 
         //Initialize text inputs
         numeTextInput = findViewById(R.id.numPrenumeTF);
@@ -104,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Initialize Views
         motiveDeplasareButon=findViewById(R.id.motiveleDeplasariiButon);
+        semnaturaButon = findViewById(R.id.semnaturaButon);
         generarePdfButon = findViewById(R.id.geneatePdfButon);
         dataTF = findViewById(R.id.dataTF);
 
@@ -123,6 +133,24 @@ public class MainActivity extends AppCompatActivity {
             checkedItems = new boolean[listaMotive.length];
             //Initializare data de azi
             dataTF.getEditText().setText(dataFormat.format(c.getTime()));
+
+            Map<String,?> savedData = sharedPreferences.getAll();
+           if(savedData!=null && savedData.size()>0) {
+               Map.Entry<String,?> entry = savedData.entrySet().iterator().next();
+               String name = entry.getKey();
+               numeTextInput.getEditText().setText(name);
+
+               String[] values = ((String)entry.getValue()).split("\\|");
+             String[] birthdate =  values[0].split("/") ;
+             Log.i("Values: ", values[0]);
+
+             ziuaNasteriiTextInput.getEditText().setText(birthdate[0]);
+             lunaNasteriiTextInput.getEditText().setText(birthdate[1]);
+             anulNasteriiTextInput.getEditText().setText(birthdate[2]);
+
+             adresaLocuinteiTextInput.getEditText().setText(values[1]);
+
+           }
         }
         //Listeners
         Dexter.withActivity(this)
@@ -134,16 +162,21 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onClick(View v) {
                                 String nume = numeTextInput.getEditText().getText().toString();
-                                String dataNasterii = ziuaNasteriiTextInput.getEditText().getText().toString() + "/" +
-                                        lunaNasteriiTextInput.getEditText().getText().toString() + "/" +
-                                        anulNasteriiTextInput.getEditText().getText().toString();
+                                String dataNasterii = "";
+                                String zi = ziuaNasteriiTextInput.getEditText().getText().toString();
+                                String luna = lunaNasteriiTextInput.getEditText().getText().toString();
+                                String anul = anulNasteriiTextInput.getEditText().getText().toString();
+                                 dataNasterii =  zi + "/" +
+                                       luna  + "/" + anul;
+
                                 String adresaLocutintei = adresaLocuinteiTextInput.getEditText().getText().toString();
                                 String locurileDeplasarii = locurileDeplasariiTextInput.getEditText().getText().toString();
                                 String data = dataTextInput.getEditText().getText().toString();
 
-                                if(nume.length()>0 && dataNasterii.length()>=8 && adresaLocutintei.length()>0 && locurileDeplasarii.length()>0 && data.length()>0) {
+                                if(nume.length()>0 && zi.length()>0&&luna.length()>0&&anul.length()>0 && dataNasterii.length()>=8 && adresaLocutintei.length()>0 && locurileDeplasarii.length()>0 && data.length()>0) {
                                   if(generatePdf(nume,dataNasterii,adresaLocutintei,locurileDeplasarii,data)) {
                                       Toast.makeText(getApplicationContext(),"Succes!",Toast.LENGTH_SHORT).show();
+                                      commitSharedPreferences(nume,dataNasterii,adresaLocutintei);
 
                                       //Open pdf
                                       try {
@@ -243,7 +276,7 @@ public class MainActivity extends AppCompatActivity {
 
                 d.show();
 
-               Button neutralButton = d.getButton(DialogInterface.BUTTON_NEUTRAL);
+                Button neutralButton = d.getButton(DialogInterface.BUTTON_NEUTRAL);
 
                neutralButton.setOnClickListener(new View.OnClickListener() {
                    @Override
@@ -259,7 +292,17 @@ public class MainActivity extends AppCompatActivity {
 
     });
 
-        //Zi nastere editText
+
+        //Listener semnatura buton
+        semnaturaButon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SignatureViewDemoDialog dialog = new SignatureViewDemoDialog();
+                dialog.show(getFragmentManager(),"semnaturaFragment");
+            }
+        });
+
+        //Zi nastere editText listener
         ziuaNasteriiTextInput.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -505,5 +548,25 @@ public class MainActivity extends AppCompatActivity {
         outState.putBooleanArray("motive",checkedItems);
         outState.putString("data",dataTF.getEditText().getText().toString());
 
+    }
+
+    protected void commitSharedPreferences(String name, String birthDate, String adresa) {
+        if(name.length()>0 && birthDate.length()>=8 && adresa.length()>0) {
+            name.replaceAll("\\|","");
+            name = name.trim();
+            birthDate.replaceAll("\\|","");
+            birthDate = birthDate.trim();
+            adresa.replaceAll("\\|","");
+            adresa = adresa.trim();
+
+            sharedPreferences.edit().putString(name,birthDate+"|"+adresa).apply();
+        }
+    }
+
+    protected void updateImageView (Bitmap bm) {
+        ImageView x = findViewById(R.id.imagine);
+        if(bm!=null) {
+            x.setImageBitmap(bm);
+        }
     }
 }

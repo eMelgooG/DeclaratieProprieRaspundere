@@ -233,6 +233,16 @@
             android:inputType="date"
             />
     </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/semnaturaButon"
+        android:layout_marginTop="16dp"
+        app:icon="@drawable/ic_add_24dp"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Adaugă semnătură"
+        app:layout_constraintStart_toStartOf="@+id/dataTF"
+        app:layout_constraintTop_toBottomOf="@id/dataTF" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/geneatePdfButon"
@@ -240,8 +250,16 @@
         android:layout_height="wrap_content"
         style="@style/Widget.MaterialComponents.Button"
         android:text="Generează PDF"
-        app:layout_constraintStart_toStartOf="@+id/dataTF"
-        app:layout_constraintTop_toBottomOf="@id/dataTF" />
+        app:layout_constraintStart_toStartOf="@+id/semnaturaButon"
+        app:layout_constraintTop_toBottomOf="@id/semnaturaButon" />
+
+    <ImageView
+        android:id="@+id/imagine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/geneatePdfButon"
+        app:layout_constraintLeft_toLeftOf="parent"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
 
