@@ -1,7 +1,6 @@
 package com.example.formcovid19;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
@@ -15,6 +14,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.pdf.PdfDocument;
@@ -182,8 +182,11 @@ public class MainActivity extends AppCompatActivity {
                                       try {
                                           Intent pdfOpenintent = new Intent(Intent.ACTION_VIEW);
                                           pdfOpenintent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                          File file = new File(Environment.getExternalStorageDirectory(),
-                                                  "myFile.pdf");
+//                                          File file = null;
+//                                              file = new File(Environment.getExternalStorageDirectory(),
+//                                                      "myFile.pdf");
+                                          File file = new File(getExternalFilesDir(null), "myFile.pdf");
+
                                           Uri path = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName(), file);
 
                                           pdfOpenintent.setDataAndType(path, "application/pdf");
@@ -191,12 +194,16 @@ public class MainActivity extends AppCompatActivity {
 
                                           startActivity(pdfOpenintent);
 
+                                          Log.i("Exists?: ", " " + file.exists());
+
                                       } catch (Exception e) {
                                           e.printStackTrace();
                                           Toast.makeText(getApplicationContext(), "Fișierul nu poate fi deschis!", Toast.LENGTH_SHORT).show();
 
                                       }
 
+                                  } else {
+                                      Toast.makeText(getApplicationContext(),"Nu am permisiune să creez fișierul!",Toast.LENGTH_SHORT).show();
                                   }
                                 } else {
                                     Toast.makeText(getApplicationContext(),"Completează toate câmpurile!",Toast.LENGTH_SHORT).show();
@@ -481,8 +488,14 @@ public class MainActivity extends AppCompatActivity {
         //Semnatura
         x = canvas.getWidth()-120;
         canvas.drawText(SEMNATURA_PDF,x,y,textNormalPaint);
-
-
+        Paint mPaint = new Paint(Paint.FILTER_BITMAP_FLAG);
+        mPaint.setFilterBitmap(true);
+        if(bm!=null) {
+            bm.setDensity(bm.getDensity()*4);
+            bm.setHasMipMap(true);
+            canvas.drawBitmap(bm, x-45, y, mPaint);
+            bm.setDensity(560);
+        }
 
 
         //reset x and y
@@ -501,10 +514,12 @@ public class MainActivity extends AppCompatActivity {
 
         //finish document
         myPdfDocument.finishPage(myPage);
-
+        String filePath = "";
         //Create the file
-        String filePath = Environment.getExternalStorageDirectory().getPath() + "/myFile.pdf";
-        File myFile = new File(filePath);
+
+        filePath   = Environment.getExternalStorageDirectory().getPath() + "/myFile.pdf";
+
+        File myFile = new File(getExternalFilesDir(null),"myFile.pdf");
 
         //write to outputstream
         try {
@@ -512,6 +527,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
             myPdfDocument.close();
+            Log.i("Sunt aici: " , " aiwqriq");
             return false;
         }
         myPdfDocument.close();

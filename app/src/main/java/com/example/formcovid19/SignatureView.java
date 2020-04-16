@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
@@ -157,6 +158,99 @@ public class SignatureView extends View implements View.OnTouchListener {
             }
         }
     }
+    // Scale a bitmap preserving the aspect ratio.
+    private Bitmap scale(Bitmap bitmap, int maxWidth, int maxHeight) {
+        // Determine the constrained dimension, which determines both dimensions.
+        int width;
+        int height;
+        float widthRatio = (float)bitmap.getWidth() / maxWidth;
+        float heightRatio = (float)bitmap.getHeight() / maxHeight;
+        // Width constrained.
+        if (widthRatio >= heightRatio) {
+            width = maxWidth;
+            height = (int)(((float)width / bitmap.getWidth()) * bitmap.getHeight());
+        }
+        // Height constrained.
+        else {
+            height = maxHeight;
+            width = (int)(((float)height / bitmap.getHeight()) * bitmap.getWidth());
+        }
+        Bitmap scaledBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+
+        float ratioX = (float)width / bitmap.getWidth();
+        float ratioY = (float)height / bitmap.getHeight();
+        float middleX = width / 2.0f;
+        float middleY = height / 2.0f;
+        Matrix scaleMatrix = new Matrix();
+        scaleMatrix.setScale(ratioX, ratioY, middleX, middleY);
+
+        Canvas canvas = new Canvas(scaledBitmap);
+        canvas.setMatrix(scaleMatrix);
+        canvas.drawBitmap(bitmap, middleX - bitmap.getWidth() / 2, middleY - bitmap.getHeight() / 2, new Paint(Paint.FILTER_BITMAP_FLAG));
+        return scaledBitmap;
+    }
+    /**
+     * @param bitmap the Bitmap to be scaled
+     * @param threshold the maxium dimension (either width or height) of the scaled bitmap
+     * @param isNecessaryToKeepOrig is it necessary to keep the original bitmap? If not recycle the original bitmap to prevent memory leak.
+     * */
+
+    public static Bitmap getScaledDownBitmap(Bitmap bitmap, int threshold, boolean isNecessaryToKeepOrig){
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+        int newWidth = width;
+        int newHeight = height;
+
+        if(width > height && width > threshold){
+            newWidth = threshold;
+            newHeight = (int)(height * (float)newWidth/width);
+        }
+
+        if(width > height && width <= threshold){
+            //the bitmap is already smaller than our required dimension, no need to resize it
+            return bitmap;
+        }
+
+        if(width < height && height > threshold){
+            newHeight = threshold;
+            newWidth = (int)(width * (float)newHeight/height);
+        }
+
+        if(width < height && height <= threshold){
+            //the bitmap is already smaller than our required dimension, no need to resize it
+            return bitmap;
+        }
+
+        if(width == height && width > threshold){
+            newWidth = threshold;
+            newHeight = newWidth;
+        }
+
+        if(width == height && width <= threshold){
+            //the bitmap is already smaller than our required dimension, no need to resize it
+            return bitmap;
+        }
+
+        return getResizedBitmap(bitmap, newWidth, newHeight, isNecessaryToKeepOrig);
+    }
+
+    private static Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight, boolean isNecessaryToKeepOrig) {
+        int width = bm.getWidth();
+        int height = bm.getHeight();
+        float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ((float) newHeight) / height;
+        // CREATE A MATRIX FOR THE MANIPULATION
+        Matrix matrix = new Matrix();
+        // RESIZE THE BIT MAP
+        matrix.postScale(scaleWidth, scaleHeight);
+
+        // "RECREATE" THE NEW BITMAP
+        Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
+        if(!isNecessaryToKeepOrig){
+            bm.recycle();
+        }
+        return resizedBitmap;
+    }
 
     public Bitmap getContentDataBMP() {
         setDrawingCacheEnabled(true);
@@ -165,7 +259,8 @@ public class SignatureView extends View implements View.OnTouchListener {
         Bitmap cropBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight() - 1);
         bitmap.recycle();
 
-        Bitmap resizedBitmap = Bitmap.createScaledBitmap(cropBitmap, 300, 80, false);
+        Bitmap resizedBitmap = getScaledDownBitmap(cropBitmap,400,false);
+//                Bitmap.createScaledBitmap(cropBitmap, 200, 50, true);
         cropBitmap.recycle();
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
