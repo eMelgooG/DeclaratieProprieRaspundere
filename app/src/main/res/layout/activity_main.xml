@@ -38,16 +38,16 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/dataNasteriiTF"
             style="@style/TextInputLayoutAppearance"
-            :textColorHint="@color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
             android:theme="@style/TextInputLayoutAppearance"
             app:boxBackgroundColor="@color/white"
             app:layout_constraintEnd_toStartOf="@+id/ziNastereTF"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="148dp">
+            app:layout_constraintTop_toBottomOf="@+id/numPrenumeTF">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="wrap_content"
@@ -63,15 +63,16 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginTop="12dp"
             android:layout_marginEnd="8dp"
             android:textColorHint="@color/gray"
             app:boxBackgroundColor="#F3F5F6"
             app:hintTextColor="@color/gray"
             app:layout_constraintEnd_toStartOf="@+id/lunaNastereTF"
             app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_weight="1.5"
             app:layout_constraintStart_toEndOf="@+id/dataNasteriiTF"
-            tools:layout_editor_absoluteY="149dp">
+            app:layout_constraintTop_toBottomOf="@+id/numPrenumeTF">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
@@ -89,6 +90,8 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            app:layout_constraintHorizontal_weight="2"
+            android:layout_marginTop="12dp"
             android:layout_marginEnd="8dp"
             android:nextFocusForward="@id/anNastereTF"
             android:textColorHint="@color/gray"
@@ -97,7 +100,7 @@
             app:layout_constraintEnd_toStartOf="@+id/anNastereTF"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/ziNastereTF"
-            tools:layout_editor_absoluteY="149dp">
+            app:layout_constraintTop_toBottomOf="@+id/numPrenumeTF">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
@@ -114,7 +117,9 @@
             android:id="@+id/anNastereTF"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
             android:layout_width="0dp"
+            app:layout_constraintHorizontal_weight="2.5"
             android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
             android:layout_marginEnd="16dp"
             android:textColorHint="@color/gray"
             app:boxBackgroundColor="#F3F5F6"
@@ -122,7 +127,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/lunaNastereTF"
-            tools:layout_editor_absoluteY="149dp">
+            app:layout_constraintTop_toBottomOf="@+id/numPrenumeTF">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
