@@ -159,36 +159,7 @@ public class SignatureView extends View implements View.OnTouchListener {
         }
     }
     // Scale a bitmap preserving the aspect ratio.
-    private Bitmap scale(Bitmap bitmap, int maxWidth, int maxHeight) {
-        // Determine the constrained dimension, which determines both dimensions.
-        int width;
-        int height;
-        float widthRatio = (float)bitmap.getWidth() / maxWidth;
-        float heightRatio = (float)bitmap.getHeight() / maxHeight;
-        // Width constrained.
-        if (widthRatio >= heightRatio) {
-            width = maxWidth;
-            height = (int)(((float)width / bitmap.getWidth()) * bitmap.getHeight());
-        }
-        // Height constrained.
-        else {
-            height = maxHeight;
-            width = (int)(((float)height / bitmap.getHeight()) * bitmap.getWidth());
-        }
-        Bitmap scaledBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 
-        float ratioX = (float)width / bitmap.getWidth();
-        float ratioY = (float)height / bitmap.getHeight();
-        float middleX = width / 2.0f;
-        float middleY = height / 2.0f;
-        Matrix scaleMatrix = new Matrix();
-        scaleMatrix.setScale(ratioX, ratioY, middleX, middleY);
-
-        Canvas canvas = new Canvas(scaledBitmap);
-        canvas.setMatrix(scaleMatrix);
-        canvas.drawBitmap(bitmap, middleX - bitmap.getWidth() / 2, middleY - bitmap.getHeight() / 2, new Paint(Paint.FILTER_BITMAP_FLAG));
-        return scaledBitmap;
-    }
     /**
      * @param bitmap the Bitmap to be scaled
      * @param threshold the maxium dimension (either width or height) of the scaled bitmap
@@ -278,7 +249,7 @@ public class SignatureView extends View implements View.OnTouchListener {
         Bitmap cropBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight() - 1);
         bitmap.recycle();
 
-        Bitmap resizedBitmap = Bitmap.createScaledBitmap(cropBitmap, 300, 80, false);
+        Bitmap resizedBitmap = getScaledDownBitmap(cropBitmap,400,false);
         cropBitmap.recycle();
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -287,5 +258,10 @@ public class SignatureView extends View implements View.OnTouchListener {
         setDrawingCacheEnabled(false);
 
         return "data:image/png;base64," + Base64.encodeToString(stream.toByteArray(), Base64.NO_WRAP);
+    }
+
+    public String encodeImageURI(Bitmap bm) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        return "data:image/png;base64," + Base64.encodeToString(stream.toByteArray(),Base64.NO_WRAP);
     }
 }

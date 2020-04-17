@@ -22,6 +22,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.PersistableBundle;
 import android.text.Editable;
 import android.text.Layout;
 import android.text.StaticLayout;
@@ -36,6 +37,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CheckedTextView;
 import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -83,10 +85,11 @@ public class MainActivity extends AppCompatActivity {
     TextInputLayout locurileDeplasariiTextInput;
     TextInputLayout dataTextInput;
 
-
-    public static Bitmap bm = null;
     //Properties
+    Bitmap bm = null;
     SharedPreferences sharedPreferences;
+    ImageView semnaturaImageView;
+    ImageButton imageButtonRemove;
     TextInputLayout dataTF;
      Button motiveDeplasareButon, generarePdfButon,semnaturaButon;
      private DatePickerDialog.OnDateSetListener mBirthDateSetListener;
@@ -112,10 +115,12 @@ public class MainActivity extends AppCompatActivity {
         dataTextInput = findViewById(R.id.dataTF);
 
         //Initialize Views
+        imageButtonRemove = findViewById(R.id.imageButtonRemove);
         motiveDeplasareButon=findViewById(R.id.motiveleDeplasariiButon);
         semnaturaButon = findViewById(R.id.semnaturaButon);
         generarePdfButon = findViewById(R.id.geneatePdfButon);
         dataTF = findViewById(R.id.dataTF);
+        semnaturaImageView = findViewById(R.id.imageViewSemnatura);
 
         // Initialize vaiables
         listaMotive = getResources().getStringArray(R.array.motivele_deplasarii);
@@ -142,12 +147,10 @@ public class MainActivity extends AppCompatActivity {
 
                String[] values = ((String)entry.getValue()).split("\\|");
              String[] birthdate =  values[0].split("/") ;
-             Log.i("Values: ", values[0]);
 
              ziuaNasteriiTextInput.getEditText().setText(birthdate[0]);
              lunaNasteriiTextInput.getEditText().setText(birthdate[1]);
              anulNasteriiTextInput.getEditText().setText(birthdate[2]);
-
              adresaLocuinteiTextInput.getEditText().setText(values[1]);
 
            }
@@ -368,6 +371,15 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        imageButtonRemove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            bm = null;
+            updateImageView(bm);
+            }
+        });
+
     }
 
 
@@ -527,7 +539,6 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
             myPdfDocument.close();
-            Log.i("Sunt aici: " , " aiwqriq");
             return false;
         }
         myPdfDocument.close();
@@ -563,7 +574,6 @@ public class MainActivity extends AppCompatActivity {
         outState.putString("locuri",locurileDeplasariiTextInput.getEditText().getText().toString());
         outState.putBooleanArray("motive",checkedItems);
         outState.putString("data",dataTF.getEditText().getText().toString());
-
     }
 
     protected void commitSharedPreferences(String name, String birthDate, String adresa) {
@@ -579,10 +589,29 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    protected void updateImageView (Bitmap bm) {
-        ImageView x = findViewById(R.id.imageViewSemnatura);
+    protected void updateImageView (Bitmap bitMap) {
+        bm = bitMap;
         if(bm!=null) {
-            x.setImageBitmap(bm);
+            semnaturaImageView.setImageBitmap(bm);
+            setVisibleSemnatura();
+        } else {
+            semnaturaImageView.invalidate();
+            setInvisibleSemnatura();
         }
     }
+
+
+   private void setVisibleSemnatura() {
+       semnaturaButon.setVisibility(View.GONE);
+       semnaturaImageView.setVisibility(View.VISIBLE);
+       imageButtonRemove.setVisibility(View.VISIBLE);
+    }
+
+    private void setInvisibleSemnatura() {
+        semnaturaButon.setVisibility(View.VISIBLE);
+        semnaturaImageView.setVisibility(View.INVISIBLE);
+        imageButtonRemove.setVisibility(View.INVISIBLE);
+    }
+
+
 }

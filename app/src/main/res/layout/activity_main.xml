@@ -259,18 +259,20 @@
             android:layout_height="wrap_content"
             android:text="Generează PDF"
             app:layout_constraintStart_toStartOf="@+id/semnaturaButon"
-            app:layout_constraintTop_toBottomOf="@id/semnaturaButon" />
+            app:layout_constraintTop_toBottomOf="@id/imageViewSemnatura" />
 
         <ImageView
             android:id="@+id/imageViewSemnatura"
             android:layout_width="120dp"
             android:layout_marginTop="6dp"
+            android:scaleType="fitXY"
             android:layout_height="36dp"
-            android:visibility="gone"
+            android:visibility="invisible"
             app:layout_constraintLeft_toLeftOf="@id/semnaturaButon"
             app:layout_constraintTop_toTopOf="@id/semnaturaButon" />
 
         <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/imageButtonRemove"
             app:layout_constraintLeft_toRightOf="@id/imageViewSemnatura"
             app:layout_constraintTop_toTopOf="@id/imageViewSemnatura"
             android:layout_width="36dp"

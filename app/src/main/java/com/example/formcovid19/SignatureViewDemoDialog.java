@@ -13,8 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import static com.example.formcovid19.MainActivity.bm;
-
 
 public class SignatureViewDemoDialog extends DialogFragment {
      SignatureView signatureView;
@@ -39,8 +37,7 @@ public class SignatureViewDemoDialog extends DialogFragment {
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        bm = signatureView.getContentDataBMP();
-                        ((MainActivity) getActivity()).updateImageView(bm);
+                        ((MainActivity) getActivity()).updateImageView(signatureView.getContentDataBMP());
 
                         // TODO data storage here
                     }
