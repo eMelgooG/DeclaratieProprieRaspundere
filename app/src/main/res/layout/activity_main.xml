@@ -209,8 +209,8 @@
             android:layout_marginTop="16dp"
             android:text="Alege motivele deplasării"
             app:icon="@drawable/ic_add_24dp"
-            app:layout_constraintStart_toStartOf="@+id/deplasareTF"
-            app:layout_constraintTop_toBottomOf="@id/deplasareTF" />
+            app:layout_constraintStart_toStartOf="@+id/dataTF"
+            app:layout_constraintTop_toBottomOf="@id/dataTF" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/dataTF"
@@ -230,7 +230,7 @@
             app:hintTextColor="@color/gray"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/motiveleDeplasariiButon">
+            app:layout_constraintTop_toBottomOf="@id/deplasareTF">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
@@ -245,27 +245,38 @@
             style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="12dp"
             android:text="Adaugă semnătură"
             app:icon="@drawable/ic_add_24dp"
-            app:layout_constraintStart_toStartOf="@+id/dataTF"
-            app:layout_constraintTop_toBottomOf="@id/dataTF" />
+            app:layout_constraintStart_toStartOf="@+id/motiveleDeplasariiButon"
+            app:layout_constraintTop_toBottomOf="@id/motiveleDeplasariiButon" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/geneatePdfButon"
             style="@style/Widget.MaterialComponents.Button"
             android:layout_width="wrap_content"
+            android:layout_marginTop="16dp"
             android:layout_height="wrap_content"
             android:text="Generează PDF"
             app:layout_constraintStart_toStartOf="@+id/semnaturaButon"
             app:layout_constraintTop_toBottomOf="@id/semnaturaButon" />
 
         <ImageView
-            android:id="@+id/imagine"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/geneatePdfButon" />
+            android:id="@+id/imageViewSemnatura"
+            android:layout_width="120dp"
+            android:layout_marginTop="6dp"
+            android:layout_height="36dp"
+            android:visibility="gone"
+            app:layout_constraintLeft_toLeftOf="@id/semnaturaButon"
+            app:layout_constraintTop_toTopOf="@id/semnaturaButon" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            app:layout_constraintLeft_toRightOf="@id/imageViewSemnatura"
+            app:layout_constraintTop_toTopOf="@id/imageViewSemnatura"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:visibility="gone"
+            android:src="@drawable/ic_rem_24dp"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
 

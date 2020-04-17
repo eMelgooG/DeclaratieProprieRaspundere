@@ -580,7 +580,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     protected void updateImageView (Bitmap bm) {
-        ImageView x = findViewById(R.id.imagine);
+        ImageView x = findViewById(R.id.imageViewSemnatura);
         if(bm!=null) {
             x.setImageBitmap(bm);
         }
