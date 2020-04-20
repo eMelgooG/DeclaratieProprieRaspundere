@@ -56,6 +56,8 @@ import org.w3c.dom.Text;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
@@ -141,11 +143,7 @@ public class MainActivity extends AppCompatActivity {
             semnaturaUriString = savedInstanceState.getString("semnatura");
             if(semnaturaUriString!=null)  {
                 Uri uri = Uri.parse(semnaturaUriString);
-                try {
-                    updateImageView(uri);
-                } catch (URISyntaxException e) {
-                    e.printStackTrace();
-                }
+                updateImageView(uri);
             }
         } else {
             checkedItems = new boolean[listaMotive.length];
@@ -168,14 +166,14 @@ public class MainActivity extends AppCompatActivity {
 
              if(values.length>2){
                  semnaturaUriString = values[2];
-                 Uri uri  = Uri.parse(semnaturaUriString);
-                 try {
+                 if(semnaturaUriString.equals("null")){
+                     Log.i("Semnatura", semnaturaUriString);
+                     updateImageView(null);
+                 } else {
+                     Uri uri = Uri.parse(semnaturaUriString);
                      updateImageView(uri);
-                 } catch (URISyntaxException e) {
-                     e.printStackTrace();
                  }
              }
-
            }
         }
         //Listeners
@@ -220,12 +218,9 @@ public class MainActivity extends AppCompatActivity {
 
                                           startActivity(pdfOpenintent);
 
-                                          Log.i("Exists?: ", " " + file.exists());
-
                                       } catch (Exception e) {
                                           e.printStackTrace();
                                           Toast.makeText(getApplicationContext(), "Fișierul nu poate fi deschis!", Toast.LENGTH_SHORT).show();
-
                                       }
 
                                   } else {
@@ -398,13 +393,9 @@ public class MainActivity extends AppCompatActivity {
         imageButtonRemove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                   File file = new File(getExternalFilesDir(null),"semnatura.png");
-                    if(file.exists()) file.delete();
-                    updateImageView(null);
-                } catch (URISyntaxException e) {
-                    e.printStackTrace();
-                }
+                File file = new File(getExternalFilesDir(null),"semnatura.png");
+                if(file.exists()) file.delete();
+                updateImageView(null);
             }
         });
 
@@ -533,8 +524,12 @@ public class MainActivity extends AppCompatActivity {
         if(semnaturaUriString!=null) {
             Bitmap bm = null;
             try {
-                bm = BitmapFactory.decodeStream(getContentResolver().openInputStream(Uri.parse(semnaturaUriString)));
+                InputStream is = getContentResolver().openInputStream(Uri.parse(semnaturaUriString));
+                bm = BitmapFactory.decodeStream(is);
+                is.close();
             } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
             if(bm!=null) {
@@ -620,14 +615,13 @@ public class MainActivity extends AppCompatActivity {
             adresa = adresa.trim();
 
             String str = birthDate+"|"+adresa;
-
-            if(semnaturaUriString!=null) str = str + "|" + semnaturaUriString;
+            str = str + "|" + semnaturaUriString;
 
             sharedPreferences.edit().putString(name,str).apply();
         }
     }
 
-    protected void updateImageView (Uri uriSemnatura) throws URISyntaxException {
+    protected void updateImageView (Uri uriSemnatura)  {
         if(uriSemnatura!=null) {
             semnaturaUriString = uriSemnatura.toString();
             semnaturaImageView.setImageURI(uriSemnatura);
@@ -653,8 +647,9 @@ public class MainActivity extends AppCompatActivity {
         imageButtonRemove.setVisibility(View.INVISIBLE);
     }
 
-
-
-
-
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.i("onPause","YES");
+    }
 }

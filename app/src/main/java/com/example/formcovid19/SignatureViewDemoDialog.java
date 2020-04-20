@@ -39,11 +39,7 @@ public class SignatureViewDemoDialog extends DialogFragment {
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        try {
-                            ((MainActivity) getActivity()).updateImageView(signatureView.getContentDataBMP());
-                        } catch (URISyntaxException e) {
-                            e.printStackTrace();
-                        }
+                        ((MainActivity) getActivity()).updateImageView(signatureView.getContentDataBMP());
 
                         // TODO data storage here
                     }
