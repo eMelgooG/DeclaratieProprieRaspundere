@@ -13,6 +13,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -53,7 +54,10 @@ import com.karumi.dexter.listener.single.PermissionListener;
 import org.w3c.dom.Text;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -75,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String SEMNATURA_PDF = "Semnătura";
     private static final String positiveCheckbox = "(x) ";
     private static final String negativeCheckbox = "( ) ";
+    private static String semnaturaUriString = null;
 
     //edit text fields
     TextInputLayout numeTextInput;
@@ -86,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
     TextInputLayout dataTextInput;
 
     //Properties
-    Bitmap bm = null;
     SharedPreferences sharedPreferences;
     ImageView semnaturaImageView;
     ImageButton imageButtonRemove;
@@ -134,6 +138,15 @@ public class MainActivity extends AppCompatActivity {
             locurileDeplasariiTextInput.getEditText().setText(savedInstanceState.getString("locuri"));
             checkedItems = savedInstanceState.getBooleanArray("motive");
             dataTextInput.getEditText().setText(savedInstanceState.getString("data"));
+            semnaturaUriString = savedInstanceState.getString("semnatura");
+            if(semnaturaUriString!=null)  {
+                Uri uri = Uri.parse(semnaturaUriString);
+                try {
+                    updateImageView(uri);
+                } catch (URISyntaxException e) {
+                    e.printStackTrace();
+                }
+            }
         } else {
             checkedItems = new boolean[listaMotive.length];
             //Initializare data de azi
@@ -152,6 +165,16 @@ public class MainActivity extends AppCompatActivity {
              lunaNasteriiTextInput.getEditText().setText(birthdate[1]);
              anulNasteriiTextInput.getEditText().setText(birthdate[2]);
              adresaLocuinteiTextInput.getEditText().setText(values[1]);
+
+             if(values.length>2){
+                 semnaturaUriString = values[2];
+                 Uri uri  = Uri.parse(semnaturaUriString);
+                 try {
+                     updateImageView(uri);
+                 } catch (URISyntaxException e) {
+                     e.printStackTrace();
+                 }
+             }
 
            }
         }
@@ -375,8 +398,13 @@ public class MainActivity extends AppCompatActivity {
         imageButtonRemove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            bm = null;
-            updateImageView(bm);
+                try {
+                   File file = new File(getExternalFilesDir(null),"semnatura.png");
+                    if(file.exists()) file.delete();
+                    updateImageView(null);
+                } catch (URISyntaxException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -502,11 +530,19 @@ public class MainActivity extends AppCompatActivity {
         canvas.drawText(SEMNATURA_PDF,x,y,textNormalPaint);
         Paint mPaint = new Paint(Paint.FILTER_BITMAP_FLAG);
         mPaint.setFilterBitmap(true);
-        if(bm!=null) {
-            bm.setDensity(bm.getDensity()*4);
-            bm.setHasMipMap(true);
-            canvas.drawBitmap(bm, x-45, y, mPaint);
-            bm.setDensity(560);
+        if(semnaturaUriString!=null) {
+            Bitmap bm = null;
+            try {
+                bm = BitmapFactory.decodeStream(getContentResolver().openInputStream(Uri.parse(semnaturaUriString)));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            if(bm!=null) {
+                bm.setDensity(bm.getDensity() * 4);
+                bm.setHasMipMap(true);
+                canvas.drawBitmap(bm, x - 45, y, mPaint);
+                bm.setDensity(560);
+            }
         }
 
 
@@ -526,11 +562,8 @@ public class MainActivity extends AppCompatActivity {
 
         //finish document
         myPdfDocument.finishPage(myPage);
-        String filePath = "";
+
         //Create the file
-
-        filePath   = Environment.getExternalStorageDirectory().getPath() + "/myFile.pdf";
-
         File myFile = new File(getExternalFilesDir(null),"myFile.pdf");
 
         //write to outputstream
@@ -574,6 +607,7 @@ public class MainActivity extends AppCompatActivity {
         outState.putString("locuri",locurileDeplasariiTextInput.getEditText().getText().toString());
         outState.putBooleanArray("motive",checkedItems);
         outState.putString("data",dataTF.getEditText().getText().toString());
+        outState.putString("semnatura",semnaturaUriString);
     }
 
     protected void commitSharedPreferences(String name, String birthDate, String adresa) {
@@ -585,16 +619,22 @@ public class MainActivity extends AppCompatActivity {
             adresa.replaceAll("\\|","");
             adresa = adresa.trim();
 
-            sharedPreferences.edit().putString(name,birthDate+"|"+adresa).apply();
+            String str = birthDate+"|"+adresa;
+
+            if(semnaturaUriString!=null) str = str + "|" + semnaturaUriString;
+
+            sharedPreferences.edit().putString(name,str).apply();
         }
     }
 
-    protected void updateImageView (Bitmap bitMap) {
-        bm = bitMap;
-        if(bm!=null) {
-            semnaturaImageView.setImageBitmap(bm);
+    protected void updateImageView (Uri uriSemnatura) throws URISyntaxException {
+        if(uriSemnatura!=null) {
+            semnaturaUriString = uriSemnatura.toString();
+            semnaturaImageView.setImageURI(uriSemnatura);
             setVisibleSemnatura();
         } else {
+            semnaturaUriString = null;
+            semnaturaImageView.setImageBitmap(null);
             semnaturaImageView.invalidate();
             setInvisibleSemnatura();
         }
@@ -612,6 +652,9 @@ public class MainActivity extends AppCompatActivity {
         semnaturaImageView.setVisibility(View.INVISIBLE);
         imageButtonRemove.setVisibility(View.INVISIBLE);
     }
+
+
+
 
 
 }

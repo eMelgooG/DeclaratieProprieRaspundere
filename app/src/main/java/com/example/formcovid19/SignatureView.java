@@ -8,6 +8,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
+import android.net.Uri;
 import android.util.AttributeSet;
 import android.util.Base64;
 import android.util.Log;
@@ -15,6 +16,8 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -223,7 +226,28 @@ public class SignatureView extends View implements View.OnTouchListener {
         return resizedBitmap;
     }
 
-    public Bitmap getContentDataBMP() {
+     protected Uri saveImage(Bitmap bm) {
+        File file = null;
+        try{
+            file = new File(getContext().getExternalFilesDir(null),"semnatura.png");
+            if(file.exists()) file.delete();
+
+            FileOutputStream outputStream =   new FileOutputStream(file);
+            bm.compress(Bitmap.CompressFormat.PNG,100,outputStream);
+            outputStream.flush();
+            outputStream.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if(file!=null) return Uri.fromFile(file);
+        else return null;
+    }
+
+    public Uri getContentDataBMP() {
+        if(signaturePaths.size()<=0) return null;
+
         setDrawingCacheEnabled(true);
 
         Bitmap bitmap = getDrawingCache();
@@ -233,13 +257,10 @@ public class SignatureView extends View implements View.OnTouchListener {
         Bitmap resizedBitmap = getScaledDownBitmap(cropBitmap,400,false);
 //                Bitmap.createScaledBitmap(cropBitmap, 200, 50, true);
         cropBitmap.recycle();
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-
-        resizedBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        Uri uri = saveImage(resizedBitmap);
         setDrawingCacheEnabled(false);
 
-        if(signaturePaths.size()>0)
-        return resizedBitmap; else return null;
+        return uri;
     }
 
     public String getContentDataURI() {

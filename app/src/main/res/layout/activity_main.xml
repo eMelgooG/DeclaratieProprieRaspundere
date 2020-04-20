@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:layout_width="match_parent"
+    android:background="@color/white"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -90,7 +91,6 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintHorizontal_weight="2"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="8dp"
             android:nextFocusForward="@id/anNastereTF"
@@ -99,6 +99,7 @@
             app:hintTextColor="@color/gray"
             app:layout_constraintEnd_toStartOf="@+id/anNastereTF"
             app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_weight="2"
             app:layout_constraintStart_toEndOf="@+id/ziNastereTF"
             app:layout_constraintTop_toBottomOf="@+id/numPrenumeTF">
 
@@ -117,7 +118,6 @@
             android:id="@+id/anNastereTF"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
             android:layout_width="0dp"
-            app:layout_constraintHorizontal_weight="2.5"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="16dp"
@@ -126,6 +126,7 @@
             app:hintTextColor="@color/gray"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_weight="2.5"
             app:layout_constraintStart_toEndOf="@+id/lunaNastereTF"
             app:layout_constraintTop_toBottomOf="@+id/numPrenumeTF">
 
@@ -255,8 +256,8 @@
             android:id="@+id/geneatePdfButon"
             style="@style/Widget.MaterialComponents.Button"
             android:layout_width="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:text="Generează PDF"
             app:layout_constraintStart_toStartOf="@+id/semnaturaButon"
             app:layout_constraintTop_toBottomOf="@id/imageViewSemnatura" />
@@ -264,21 +265,22 @@
         <ImageView
             android:id="@+id/imageViewSemnatura"
             android:layout_width="120dp"
+            android:layout_height="36dp"
             android:layout_marginTop="6dp"
             android:scaleType="fitXY"
-            android:layout_height="36dp"
             android:visibility="invisible"
             app:layout_constraintLeft_toLeftOf="@id/semnaturaButon"
             app:layout_constraintTop_toTopOf="@id/semnaturaButon" />
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/imageButtonRemove"
-            app:layout_constraintLeft_toRightOf="@id/imageViewSemnatura"
-            app:layout_constraintTop_toTopOf="@id/imageViewSemnatura"
             android:layout_width="36dp"
             android:layout_height="36dp"
+            android:background="@color/white"
+            android:src="@drawable/ic_rem_icon"
             android:visibility="gone"
-            android:src="@drawable/ic_rem_24dp"/>
+            app:layout_constraintLeft_toRightOf="@id/imageViewSemnatura"
+            app:layout_constraintTop_toTopOf="@id/imageViewSemnatura" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
 

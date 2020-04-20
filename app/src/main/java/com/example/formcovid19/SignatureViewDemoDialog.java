@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import java.net.URISyntaxException;
+
 
 public class SignatureViewDemoDialog extends DialogFragment {
      SignatureView signatureView;
@@ -37,7 +39,11 @@ public class SignatureViewDemoDialog extends DialogFragment {
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ((MainActivity) getActivity()).updateImageView(signatureView.getContentDataBMP());
+                        try {
+                            ((MainActivity) getActivity()).updateImageView(signatureView.getContentDataBMP());
+                        } catch (URISyntaxException e) {
+                            e.printStackTrace();
+                        }
 
                         // TODO data storage here
                     }
