@@ -36,6 +36,7 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/dataNasteriiTF"
             style="@style/TextInputLayoutAppearance"
@@ -55,6 +56,7 @@
                 android:layout_height="wrap_content"
                 android:alpha="0.8"
                 android:enabled="false"
+                android:paddingTop="16dp"
                 android:text="Data nașterii:"
                 android:textColor="@color/black" />
         </com.google.android.material.textfield.TextInputLayout>
