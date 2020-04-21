@@ -1,4 +1,4 @@
-package com.example.formcovid19;
+package com.lea.Declaratie;
 
 import org.junit.Test;
 

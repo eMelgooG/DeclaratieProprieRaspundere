@@ -1,4 +1,4 @@
-package com.example.formcovid19;
+package com.lea.Declaratie;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -7,11 +7,9 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.util.AttributeSet;
 import android.util.Base64;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 

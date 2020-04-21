@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FormCovid19</string>
+    <string name="app_name">Declarație</string>
     <string-array name="motivele_deplasarii">
         <item>1. interes profesional, inclusiv între locuință/gospodărie și locul/locurile de desfășurare a activității profesionale și înapoi;</item>
         <item>2. asigurarea de bunuri care acoperă necesitățile de bază ale persoanelor și animalelor de companie/domestice;</item>
