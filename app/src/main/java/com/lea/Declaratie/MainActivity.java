@@ -234,20 +234,35 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onPermissionDenied(PermissionDeniedResponse response) {
 
-                        Log.i("Hello","Hello");
-                        generarePdfButon.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Toast.makeText(getApplicationContext(),"Nu am permisiune să creez fișierul. Restartează aplicația și selectează Allow!",Toast.LENGTH_LONG).show();
-                            }
-                        });
+                       if(response.isPermanentlyDenied()) {
+                           generarePdfButon.setOnClickListener(new View.OnClickListener() {
+                               @Override
+                               public void onClick(View v) {
+                                   Toast.makeText(getApplicationContext(),"Nu am permisiune să creez fișierul. Reinstalează aplicația și selectează Allow!",Toast.LENGTH_LONG).show();
+                               }
+                           });
 
-                        semnaturaButon.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Toast.makeText(getApplicationContext(),"Nu am permisiune să creez fișierul. Restartează aplicația și selectează Allow!",Toast.LENGTH_LONG).show();
-                            }
-                        });
+                           semnaturaButon.setOnClickListener(new View.OnClickListener() {
+                               @Override
+                               public void onClick(View v) {
+                                   Toast.makeText(getApplicationContext(),"Nu am permisiune să creez fișierul. Reinstalează aplicația și selectează Allow!",Toast.LENGTH_LONG).show();
+                               }
+                           });
+                       } else {
+                           generarePdfButon.setOnClickListener(new View.OnClickListener() {
+                               @Override
+                               public void onClick(View v) {
+                                   Toast.makeText(getApplicationContext(), "Nu am permisiune să creez fișierul. Restartează aplicația și selectează Allow!", Toast.LENGTH_LONG).show();
+                               }
+                           });
+
+                           semnaturaButon.setOnClickListener(new View.OnClickListener() {
+                               @Override
+                               public void onClick(View v) {
+                                   Toast.makeText(getApplicationContext(), "Nu am permisiune să creez fișierul. Restartează aplicația și selectează Allow!", Toast.LENGTH_LONG).show();
+                               }
+                           });
+                       }
                     }
 
                     @Override
