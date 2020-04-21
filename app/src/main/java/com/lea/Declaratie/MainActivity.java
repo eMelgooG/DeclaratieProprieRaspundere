@@ -87,8 +87,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        sharedPreferences = this.getSharedPreferences("com.lea.Declaratie", Context.MODE_PRIVATE);
-
         //Initialize text inputs
         numeTextInput = findViewById(R.id.numPrenumeTF);
         ziuaNasteriiTextInput = findViewById(R.id.ziNastereTF);
@@ -106,9 +104,10 @@ public class MainActivity extends AppCompatActivity {
         generarePdfButon = findViewById(R.id.geneatePdfButon);
         semnaturaImageView = findViewById(R.id.imageViewSemnatura);
 
-        // Initialize vaiables
+        // Initialize variables
         listaMotive = getResources().getStringArray(R.array.motivele_deplasarii);
 
+        //Reinitialize the state if configuration change occurs
         if (savedInstanceState != null) {
             numeTextInput.getEditText().setText(savedInstanceState.getString("nume"));
             ziuaNasteriiTextInput.getEditText().setText(savedInstanceState.getString("zi"));
@@ -124,10 +123,13 @@ public class MainActivity extends AppCompatActivity {
                 updateImageView(uri);
             }
         } else {
+            //Otherwise get the shared preferences and update everything
+            sharedPreferences = this.getSharedPreferences("com.lea.Declaratie", Context.MODE_PRIVATE);
             checkedItems = new boolean[listaMotive.length];
             //Initializare data de azi
             dataTF.getEditText().setText(dataFormat.format(c.getTime()));
 
+            /** Get the preferences values  and update*/
             Map<String, ?> savedData = sharedPreferences.getAll();
             if (savedData != null && savedData.size() > 0) {
                 Map.Entry<String, ?> entry = savedData.entrySet().iterator().next();
@@ -142,10 +144,10 @@ public class MainActivity extends AppCompatActivity {
                 anulNasteriiTextInput.getEditText().setText(birthdate[2]);
                 adresaLocuinteiTextInput.getEditText().setText(values[1]);
 
+                //it means that we already have a signature for the default user
                 if (values.length > 2) {
                     semnaturaUriString = values[2];
                     if (semnaturaUriString.equals("null")) {
-                        Log.i("Semnatura", semnaturaUriString);
                         updateImageView(null);
                     } else {
                         Uri uri = Uri.parse(semnaturaUriString);
@@ -154,23 +156,27 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+
         //Listeners
+        //We ask for permission to WRITE
         Dexter.withActivity(this)
                 .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .withListener(new PermissionListener() {
                     @Override
                     public void onPermissionGranted(PermissionGrantedResponse response) {
+                        //We set listener to the generate pdf button and generate the PDF if it passes all the filters
                         generarePdfButon.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+
+                                //Get the user input
                                 String nume = numeTextInput.getEditText().getText().toString();
                                 String dataNasterii = "";
                                 String zi = ziuaNasteriiTextInput.getEditText().getText().toString();
                                 String luna = lunaNasteriiTextInput.getEditText().getText().toString();
                                 String anul = anulNasteriiTextInput.getEditText().getText().toString();
 
-
-                                // check all the text fields to be completed
+                                // check to see if all the text fields are filled
                                 if (zi.length() > 0 && luna.length() > 0 && anul.length() >= 4) {
                                     dataNasterii = zi + "/" +
                                             luna + "/" + anul;
@@ -179,39 +185,44 @@ public class MainActivity extends AppCompatActivity {
                                     String data = dataTextInput.getEditText().getText().toString();
 
                                     if (nume.length() > 0 && adresaLocutintei.length() > 0) {
-                                        commitSharedPreferences(nume, dataNasterii, adresaLocutintei);
+                                        commitSharedPreferences(nume, dataNasterii, adresaLocutintei);  // we commit sharedPreferences
 
                                         if (locurileDeplasarii.length() > 0) {
 
-                                            // check to see if there are any reasons selected
-                                            for (int i = 0; i < checkedItems; )
+                                            // check to see if there are any reasons selected and also retrieve the Motivele in String format to write to to the PDF
+                                            String motive = getMotive();
+                                            if (motive.length() > 0) {
 
+                                                // try to create the pdf
+                                            if (generatePdf(nume, dataNasterii, adresaLocutintei, locurileDeplasarii, data, motive)) {
+                                                //Open pdf
+                                                try {
+                                                    Intent pdfOpenintent = new Intent(Intent.ACTION_VIEW);
+                                                    pdfOpenintent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                                                if (generatePdf(nume, dataNasterii, adresaLocutintei, locurileDeplasarii, data)) {
-                                                    Toast.makeText(getApplicationContext(), "Succes!", Toast.LENGTH_SHORT).show();
+                                                    File file = new File(getExternalFilesDir(null), "myFile.pdf");
 
-                                                    //Open pdf
-                                                    try {
-                                                        Intent pdfOpenintent = new Intent(Intent.ACTION_VIEW);
-                                                        pdfOpenintent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                    Uri path = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName(), file);
 
-                                                        File file = new File(getExternalFilesDir(null), "myFile.pdf");
+                                                    pdfOpenintent.setDataAndType(path, "application/pdf");
+                                                    pdfOpenintent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
-                                                        Uri path = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName(), file);
+                                                    startActivity(pdfOpenintent);
 
-                                                        pdfOpenintent.setDataAndType(path, "application/pdf");
-                                                        pdfOpenintent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-                                                        startActivity(pdfOpenintent);
-
-                                                    } catch (Exception e) {
-                                                        e.printStackTrace();
-                                                        Toast.makeText(getApplicationContext(), "Fișierul nu poate fi deschis!", Toast.LENGTH_SHORT).show();
-                                                    }
-
-                                                } else {
-                                                    Toast.makeText(getApplicationContext(), "Ceva nu a mers cum trebuie!", Toast.LENGTH_SHORT).show();
+                                                } catch (Exception e) {
+                                                    e.printStackTrace();
+                                                    Toast.makeText(getApplicationContext(), "Fișierul nu poate fi deschis!", Toast.LENGTH_SHORT).show();
                                                 }
+                                                Toast.makeText(getApplicationContext(), "Succes!", Toast.LENGTH_SHORT).show();
+
+                                            } else {
+                                                Toast.makeText(getApplicationContext(), "Ceva nu a mers cum trebuie!", Toast.LENGTH_SHORT).show();
+                                            }
+
+                                        } else {
+                                                Toast.makeText(getApplicationContext(), "Alege cel puțin un motiv!", Toast.LENGTH_SHORT).show();
+                                                //to be done show warning sign
+                                            }
 
                                         } else {
                                             Toast.makeText(getApplicationContext(), "Completează toate câmpurile!", Toast.LENGTH_SHORT).show();
@@ -227,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                         });
 
-                        //Listener semnatura buton
+                        //If permission granted also set listener to semnatura buton
                         semnaturaButon.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -273,7 +284,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onPermissionRationaleShouldBeShown(PermissionRequest permission, final PermissionToken token) {
-
+                        //continue asking for permission when app reopens
                         token.continuePermissionRequest();
                     }
                 })
@@ -423,7 +434,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private boolean generatePdf(String name, String birthDate, String address, String placesToGo, String date) {
+    private boolean generatePdf(String name, String birthDate, String address, String placesToGo, String date, String motive) {
         PdfDocument myPdfDocument = new PdfDocument();
         PdfDocument.PageInfo myPageInfo = new PdfDocument.PageInfo.Builder(595, 842, 1).create();
         PdfDocument.Page myPage = myPdfDocument.startPage(myPageInfo);
@@ -505,7 +516,6 @@ public class MainActivity extends AppCompatActivity {
         y = breakLine(y, helperTextPaint, 0.3f);
 
         //Scrie motivele
-        String motive = getMotive();
         mTextPaint = new TextPaint(textMotivePaint);
         mTextLayout = new StaticLayout(motive, mTextPaint, canvas.getWidth() - 70, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.5f, false);
         canvas.save();
@@ -599,15 +609,17 @@ public class MainActivity extends AppCompatActivity {
 
     private String getMotive() {
         StringBuilder motive = new StringBuilder("");
+        boolean x = false;
         for (int i = 0; i < checkedItems.length; i++) {
             if (checkedItems[i]) {
                 motive.append(positiveCheckbox + listaMotive[i]);
+                x = true;
             } else {
                 motive.append(negativeCheckbox + listaMotive[i]);
             }
             motive.append("\n");
         }
-        return motive.toString();
+        if(x) return motive.toString(); else return "";
     }
 
     @Override
