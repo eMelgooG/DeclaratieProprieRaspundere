@@ -220,16 +220,40 @@ public class MainActivity extends AppCompatActivity {
 
                             }
                         });
+
+                        //Listener semnatura buton
+                        semnaturaButon.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                SignatureViewDemoDialog dialog = new SignatureViewDemoDialog();
+                                dialog.show(getFragmentManager(),"semnaturaFragment");
+                            }
+                        });
                     }
 
                     @Override
                     public void onPermissionDenied(PermissionDeniedResponse response) {
 
+                        Log.i("Hello","Hello");
+                        generarePdfButon.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Toast.makeText(getApplicationContext(),"Nu am permisiune să creez fișierul. Restartează aplicația și selectează Allow!",Toast.LENGTH_LONG).show();
+                            }
+                        });
+
+                        semnaturaButon.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Toast.makeText(getApplicationContext(),"Nu am permisiune să creez fișierul. Restartează aplicația și selectează Allow!",Toast.LENGTH_LONG).show();
+                            }
+                        });
                     }
 
                     @Override
-                    public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+                    public void onPermissionRationaleShouldBeShown(PermissionRequest permission, final PermissionToken token) {
 
+                    token.continuePermissionRequest();
                     }
                 })
                 .check();
@@ -306,15 +330,6 @@ public class MainActivity extends AppCompatActivity {
 
     });
 
-
-        //Listener semnatura buton
-        semnaturaButon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SignatureViewDemoDialog dialog = new SignatureViewDemoDialog();
-                dialog.show(getFragmentManager(),"semnaturaFragment");
-            }
-        });
 
         //Zi nastere editText listener
         ziuaNasteriiTextInput.getEditText().addTextChangedListener(new TextWatcher() {
@@ -636,6 +651,5 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        Log.i("onPause","YES");
     }
 }
