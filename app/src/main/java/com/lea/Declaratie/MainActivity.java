@@ -87,6 +87,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        sharedPreferences = this.getSharedPreferences("com.lea.Declaratie", Context.MODE_PRIVATE);
+
         //Initialize text inputs
         numeTextInput = findViewById(R.id.numPrenumeTF);
         ziuaNasteriiTextInput = findViewById(R.id.ziNastereTF);
@@ -123,8 +125,7 @@ public class MainActivity extends AppCompatActivity {
                 updateImageView(uri);
             }
         } else {
-            //Otherwise get the shared preferences and update everything
-            sharedPreferences = this.getSharedPreferences("com.lea.Declaratie", Context.MODE_PRIVATE);
+            //Otherwise update everything
             checkedItems = new boolean[listaMotive.length];
             //Initializare data de azi
             dataTF.getEditText().setText(dataFormat.format(c.getTime()));
@@ -177,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
                                 String anul = anulNasteriiTextInput.getEditText().getText().toString();
 
                                 // check to see if all the text fields are filled
-                                if (zi.length() > 0 && luna.length() > 0 && anul.length() >= 4) {
+                                if (zi.length() > 0 && luna.length() > 0 && anul.length() > 0) {
                                     dataNasterii = zi + "/" +
                                             luna + "/" + anul;
                                     String adresaLocutintei = adresaLocuinteiTextInput.getEditText().getText().toString();
@@ -192,6 +193,7 @@ public class MainActivity extends AppCompatActivity {
                                             // check to see if there are any reasons selected and also retrieve the Motivele in String format to write to to the PDF
                                             String motive = getMotive();
                                             if (motive.length() > 0) {
+                                                        if(anul.length()<4){anulNasteriiTextInput.setError("Invalid"); return;}
 
                                                 // try to create the pdf
                                             if (generatePdf(nume, dataNasterii, adresaLocutintei, locurileDeplasarii, data, motive)) {
@@ -339,9 +341,7 @@ public class MainActivity extends AppCompatActivity {
 
                 mBuilder.setNeutralButton("Șterge tot", null);
 
-
                 final AlertDialog d = mBuilder.create();
-                ;
 
                 d.show();
 
@@ -416,8 +416,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if (anulNasteriiTextInput.getEditText().getText().toString().length() == 4) {
-                    if (anulNasteriiTextInput.getEditText().getSelectionEnd() == 4)
+                    if (anulNasteriiTextInput.getEditText().getSelectionEnd() == 4) {
                         adresaLocuinteiTextInput.requestFocus();
+                        anulNasteriiTextInput.setErrorEnabled(false);
+                    }
                 }
             }
         });
