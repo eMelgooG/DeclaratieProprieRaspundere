@@ -197,35 +197,44 @@ public class MainActivity extends AppCompatActivity {
                                             // check to see if there are any reasons selected and also retrieve the Motivele in String format to write to to the PDF
                                             String motive = getMotive();
                                             if (motive.length() > 0) {
-                                                        if(anul.length()<4){anulNasteriiTextInput.setError("Invalid");return;}
-
-                                                // try to create the pdf
-                                            if (generatePdf(nume, dataNasterii, adresaLocutintei, locurileDeplasarii, data, motive)) {
-                                                //Open pdf
-                                                try {
-                                                    Intent pdfOpenintent = new Intent(Intent.ACTION_VIEW);
-                                                    pdfOpenintent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                                                    File file = new File(getExternalFilesDir(null), "myFile.pdf");
-
-                                                    Uri path = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName(), file);
-
-                                                    pdfOpenintent.setDataAndType(path, "application/pdf");
-                                                    pdfOpenintent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-                                                    startActivity(pdfOpenintent);
-
-                                                } catch (Exception e) {
-                                                    e.printStackTrace();
-                                                    Toast.makeText(getApplicationContext(), "Fișierul nu poate fi deschis!", Toast.LENGTH_SHORT).show();
+                                                if (anul.length() < 4) {
+                                                    anulNasteriiTextInput.setError("Invalid");
+                                                    anulNasteriiTextInput.requestFocus();
+                                                    return;
                                                 }
-                                                Toast.makeText(getApplicationContext(), "Succes!", Toast.LENGTH_SHORT).show();
+
+                                                if (data.length() < 8) {
+                                                    Toast.makeText(getApplicationContext(), "Data introdusă este invalidă!", Toast.LENGTH_SHORT).show();
+                                                    dataTextInput.requestFocus();
+                                                    return;
+                                                }
+                                                // try to create the pdf
+                                                if (generatePdf(nume, dataNasterii, adresaLocutintei, locurileDeplasarii, data, motive)) {
+                                                    //Open pdf
+                                                    try {
+                                                        Intent pdfOpenintent = new Intent(Intent.ACTION_VIEW);
+                                                        pdfOpenintent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                                                        File file = new File(getExternalFilesDir(null), "myFile.pdf");
+
+                                                        Uri path = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName(), file);
+
+                                                        pdfOpenintent.setDataAndType(path, "application/pdf");
+                                                        pdfOpenintent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                                                        startActivity(pdfOpenintent);
+
+                                                    } catch (Exception e) {
+                                                        e.printStackTrace();
+                                                        Toast.makeText(getApplicationContext(), "Fișierul nu poate fi deschis!", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                    Toast.makeText(getApplicationContext(), "Succes!", Toast.LENGTH_SHORT).show();
+
+                                                } else {
+                                                    Toast.makeText(getApplicationContext(), "Ceva nu a mers cum trebuie!", Toast.LENGTH_SHORT).show();
+                                                }
 
                                             } else {
-                                                Toast.makeText(getApplicationContext(), "Ceva nu a mers cum trebuie!", Toast.LENGTH_SHORT).show();
-                                            }
-
-                                        } else {
                                                 Toast.makeText(getApplicationContext(), "Alege cel puțin un motiv!", Toast.LENGTH_SHORT).show();
                                                 //to be done show warning sign
                                                 motiveDeplasareButon.setIconTintResource(R.color.red);
@@ -339,10 +348,10 @@ public class MainActivity extends AppCompatActivity {
                 mBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if(!isOk[0]) {
+                        if (!isOk[0]) {
                             for (int i = 0; i < checkedItems.length; i++)
                                 if (checkedItems[i]) {
-                                   motiveDeplasareButon.setIconTintResource(R.color.colorPrimary);
+                                    motiveDeplasareButon.setIconTintResource(R.color.colorPrimary);
                                     break;
                                 }
                         }
@@ -632,7 +641,8 @@ public class MainActivity extends AppCompatActivity {
             }
             motive.append("\n");
         }
-        if(x) return motive.toString(); else return "";
+        if (x) return motive.toString();
+        else return "";
     }
 
     @Override
