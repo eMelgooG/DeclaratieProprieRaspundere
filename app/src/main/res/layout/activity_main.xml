@@ -204,8 +204,8 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/motiveleDeplasariiButon"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+            android:id="@+id/motiveleDeplasariiButon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"

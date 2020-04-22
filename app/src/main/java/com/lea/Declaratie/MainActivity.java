@@ -2,6 +2,7 @@ package com.lea.Declaratie;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import android.Manifest;
@@ -14,8 +15,10 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.Bundle;
@@ -34,6 +37,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
@@ -70,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Views
     TextInputLayout numeTextInput, ziuaNasteriiTextInput, lunaNasteriiTextInput, anulNasteriiTextInput, adresaLocuinteiTextInput, locurileDeplasariiTextInput, dataTextInput, dataTF;
-    Button motiveDeplasareButon, generarePdfButon, semnaturaButon;
+    MaterialButton motiveDeplasareButon, generarePdfButon, semnaturaButon;
     ImageView semnaturaImageView;
     ImageButton imageButtonRemove;
 
@@ -186,14 +190,14 @@ public class MainActivity extends AppCompatActivity {
                                     String data = dataTextInput.getEditText().getText().toString();
 
                                     if (nume.length() > 0 && adresaLocutintei.length() > 0) {
-                                        commitSharedPreferences(nume, dataNasterii, adresaLocutintei);  // we commit sharedPreferences
+                                        commitSharedPreferences(nume, dataNasterii, adresaLocutintei);  // commit sharedPreferences
 
                                         if (locurileDeplasarii.length() > 0) {
 
                                             // check to see if there are any reasons selected and also retrieve the Motivele in String format to write to to the PDF
                                             String motive = getMotive();
                                             if (motive.length() > 0) {
-                                                        if(anul.length()<4){anulNasteriiTextInput.setError("Invalid"); return;}
+                                                        if(anul.length()<4){anulNasteriiTextInput.setError("Invalid");return;}
 
                                                 // try to create the pdf
                                             if (generatePdf(nume, dataNasterii, adresaLocutintei, locurileDeplasarii, data, motive)) {
@@ -224,6 +228,7 @@ public class MainActivity extends AppCompatActivity {
                                         } else {
                                                 Toast.makeText(getApplicationContext(), "Alege cel puțin un motiv!", Toast.LENGTH_SHORT).show();
                                                 //to be done show warning sign
+                                                motiveDeplasareButon.setIconTintResource(R.color.red);
                                             }
 
                                         } else {
@@ -307,11 +312,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         motiveDeplasareButon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 //Clear previous focus
                 View current = getCurrentFocus();
                 if (current != null) current.clearFocus();
@@ -321,13 +324,14 @@ public class MainActivity extends AppCompatActivity {
                 if (inputMethodManager != null)
                     inputMethodManager.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
 
+                final boolean[] isOk = new boolean[2];
+
                 final AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
                 mBuilder.setTitle("Alege cel puțin o variantă");
 
                 mBuilder.setMultiChoiceItems(listaMotive, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                        //Do nothing
                     }
                 });
 
@@ -335,6 +339,13 @@ public class MainActivity extends AppCompatActivity {
                 mBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        if(!isOk[0]) {
+                            for (int i = 0; i < checkedItems.length; i++)
+                                if (checkedItems[i]) {
+                                   motiveDeplasareButon.setIconTintResource(R.color.colorPrimary);
+                                    break;
+                                }
+                        }
                         // TO DO WHEN OK IS PRESSED
                     }
                 });
@@ -355,12 +366,12 @@ public class MainActivity extends AppCompatActivity {
                             checkedItems[i] = false;
                             listView.setItemChecked(i, false);
                         }
+                        isOk[0] = true;
                     }
                 });
             }
 
         });
-
 
         //Zi nastere editText listener
         ziuaNasteriiTextInput.getEditText().addTextChangedListener(new TextWatcher() {
