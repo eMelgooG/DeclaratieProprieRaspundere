@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_regular_textfield"
-            android:layout_marginTop="75dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="@dimen/margin_regular_textfield"
             android:hint="Nume și prenume"
             android:textColorHint="@color/gray"
@@ -25,7 +25,7 @@
             app:hintTextColor="@color/gray"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/titluTV">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
@@ -150,7 +150,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_regular_textfield"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="@dimen/margin_regular_textfield"
             android:hint="Adresa locuinței"
             android:textColorHint="@color/gray"
@@ -195,11 +195,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:fontFamily="cursive"
-            android:text="Formular oficial Covid19"
+            android:fontFamily="@font/ds"
+            android:text="Declarație pe proprie răspundere"
             android:textColor="@color/black"
             android:textSize="30sp"
-            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
