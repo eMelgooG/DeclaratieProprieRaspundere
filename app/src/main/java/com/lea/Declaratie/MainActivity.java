@@ -124,44 +124,24 @@ public class MainActivity extends AppCompatActivity {
             checkedItems = savedInstanceState.getBooleanArray("motive");
             dataTextInput.getEditText().setText(savedInstanceState.getString("data"));
             semnaturaUriString = savedInstanceState.getString("semnatura");
-            if (semnaturaUriString != null) {
-                Uri uri = Uri.parse(semnaturaUriString);
-                updateImageView(uri);
-            }
         } else {
             //Otherwise update everything
             checkedItems = new boolean[listaMotive.length];
             //Initializare data de azi
             dataTF.getEditText().setText(dataFormat.format(c.getTime()));
 
-            /** Get the preferences values  and update*/
-            Map<String, ?> savedData = sharedPreferences.getAll();
-            if (savedData != null && savedData.size() > 0) {
-                Map.Entry<String, ?> entry = savedData.entrySet().iterator().next();
-                String name = entry.getKey();
-                numeTextInput.getEditText().setText(name);
-
-                String[] values = ((String) entry.getValue()).split("\\|");
-                String[] birthdate = values[0].split("/");
-
-                ziuaNasteriiTextInput.getEditText().setText(birthdate[0]);
-                lunaNasteriiTextInput.getEditText().setText(birthdate[1]);
-                anulNasteriiTextInput.getEditText().setText(birthdate[2]);
-                adresaLocuinteiTextInput.getEditText().setText(values[1]);
-
-                //it means that we already have a signature for the default user
-                if (values.length > 2) {
-                    semnaturaUriString = values[2];
-                    if (semnaturaUriString.equals("null")) {
-                        updateImageView(null);
-                    } else {
-                        Uri uri = Uri.parse(semnaturaUriString);
-                        updateImageView(uri);
-                    }
-                }
-            }
+            numeTextInput.getEditText().setText(sharedPreferences.getString("nume",null));
+            ziuaNasteriiTextInput.getEditText().setText(sharedPreferences.getString("zi",null));
+            lunaNasteriiTextInput.getEditText().setText(sharedPreferences.getString("luna",null));
+            anulNasteriiTextInput.getEditText().setText(sharedPreferences.getString("an",null));
+            adresaLocuinteiTextInput.getEditText().setText(sharedPreferences.getString("adresa",null));
+            semnaturaUriString = sharedPreferences.getString("semnatura",null);
         }
 
+        if (semnaturaUriString != null) {
+            Uri uri = Uri.parse(semnaturaUriString);
+            updateImageView(uri);
+        }
         //Listeners
         //We ask for permission to WRITE
         Dexter.withActivity(this)
@@ -181,8 +161,13 @@ public class MainActivity extends AppCompatActivity {
                                 String luna = lunaNasteriiTextInput.getEditText().getText().toString();
                                 String anul = anulNasteriiTextInput.getEditText().getText().toString();
 
+                                SharedPreferences.Editor sharedPreferencesEdit = sharedPreferences.edit();
+                                sharedPreferencesEdit.putString("semnatura",semnaturaUriString);
                                 // check to see if all the text fields are filled
                                 if (zi.length() > 0 && luna.length() > 0 && anul.length() > 0) {
+                                    sharedPreferencesEdit.putString("zi",zi);
+                                    sharedPreferencesEdit.putString("luna",luna);
+                                    sharedPreferencesEdit.putString("an",anul);
                                     dataNasterii = zi + "/" +
                                             luna + "/" + anul;
                                     String adresaLocutintei = adresaLocuinteiTextInput.getEditText().getText().toString();
@@ -190,7 +175,9 @@ public class MainActivity extends AppCompatActivity {
                                     String data = dataTextInput.getEditText().getText().toString();
 
                                     if (nume.length() > 0 && adresaLocutintei.length() > 0) {
-                                        commitSharedPreferences(nume, dataNasterii, adresaLocutintei);  // commit sharedPreferences
+                                        sharedPreferencesEdit.putString("nume",nume);
+                                        sharedPreferencesEdit.putString("adresa",adresaLocutintei);
+                                        sharedPreferencesEdit.apply();
 
                                         if (locurileDeplasarii.length() > 0) {
 
@@ -348,15 +335,16 @@ public class MainActivity extends AppCompatActivity {
                 mBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (!isOk[0]) {
-                            for (int i = 0; i < checkedItems.length; i++)
+                        int i = 0;
+                            for (; i < checkedItems.length; i++)
                                 if (checkedItems[i]) {
                                     motiveDeplasareButon.setIconTintResource(R.color.colorPrimary);
-                                    break;
+                                    motiveDeplasareButon.setIcon(getDrawable(R.drawable.ic_check_black_24dp));
+                                    return;
                                 }
-                        }
-                        // TO DO WHEN OK IS PRESSED
+                        if (i==checkedItems.length)  motiveDeplasareButon.setIcon(getDrawable(R.drawable.ic_add_24dp));
                     }
+
                 });
 
                 mBuilder.setNeutralButton("Șterge tot", null);
@@ -659,21 +647,7 @@ public class MainActivity extends AppCompatActivity {
         outState.putString("semnatura", semnaturaUriString);
     }
 
-    protected void commitSharedPreferences(String name, String birthDate, String adresa) {
-        if (name.length() > 0 && birthDate.length() >= 8 && adresa.length() > 0) {
-            name.replaceAll("\\|", "");
-            name = name.trim();
-            birthDate.replaceAll("\\|", "");
-            birthDate = birthDate.trim();
-            adresa.replaceAll("\\|", "");
-            adresa = adresa.trim();
 
-            String str = birthDate + "|" + adresa;
-            str = str + "|" + semnaturaUriString;
-
-            sharedPreferences.edit().putString(name, str).apply();
-        }
-    }
 
     protected void updateImageView(Uri uriSemnatura) {
         if (uriSemnatura != null) {
