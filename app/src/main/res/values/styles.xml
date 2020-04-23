@@ -4,6 +4,11 @@
     <style name="ThemeCovid19" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Original AppCompat attributes. -->
 <item name="android:statusBarColor">#000000</item>
+        <item name="colorPrimary">@color/buttonColor2</item>
+        <item name="colorSecondary">@color/seagreen</item>
+        <item name="android:windowBackground">@color/backgroundColor</item>
+
+
     </style>
 
 

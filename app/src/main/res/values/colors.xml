@@ -5,6 +5,9 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+    <color name ="buttonColor">#ba8cd7</color>
+    <color name="olivedrab">#6B8E23</color>
+    <color name="buttonColor2">#a167c9</color>
     <color name="red">#FF0000</color>
     <color name="orange">#FFA500</color>
     <color name="yellow">#FFFF00</color>

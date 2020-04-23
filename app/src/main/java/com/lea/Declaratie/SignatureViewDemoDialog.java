@@ -12,7 +12,8 @@ import android.view.ViewGroup;
 
 
 public class SignatureViewDemoDialog extends DialogFragment {
-     SignatureView signatureView;
+    SignatureView signatureView;
+
     public static SignatureViewDemoDialog newInstance(Fragment caller) {
 
         SignatureViewDemoDialog demoDialog = new SignatureViewDemoDialog();
@@ -26,7 +27,7 @@ public class SignatureViewDemoDialog extends DialogFragment {
 
         Context context = getActivity();
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-       signatureView = new SignatureView(context, null);
+        signatureView = new SignatureView(context, null);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder
@@ -39,7 +40,7 @@ public class SignatureViewDemoDialog extends DialogFragment {
                         // TODO data storage here
                     }
                 })
-                .setNeutralButton("Șterge",null);
+                .setNeutralButton("Șterge", null);
 
         return builder.create();
     }
@@ -57,7 +58,7 @@ public class SignatureViewDemoDialog extends DialogFragment {
         params.width = ViewGroup.LayoutParams.MATCH_PARENT;
         params.height = ViewGroup.LayoutParams.MATCH_PARENT;
         getDialog().getWindow().setAttributes((android.view.WindowManager.LayoutParams) params);
-        ((AlertDialog)getDialog()).getButton(DialogInterface.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
+        ((AlertDialog) getDialog()).getButton(DialogInterface.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 signatureView.clearCanvas();

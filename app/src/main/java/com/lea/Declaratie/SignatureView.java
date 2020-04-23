@@ -115,7 +115,7 @@ public class SignatureView extends View implements View.OnTouchListener {
     }
 
 
-    public void clearCanvas( ) {
+    public void clearCanvas() {
         initDefaultValues();
         postInvalidate();
     }
@@ -162,43 +162,43 @@ public class SignatureView extends View implements View.OnTouchListener {
     // Scale a bitmap preserving the aspect ratio.
 
     /**
-     * @param bitmap the Bitmap to be scaled
-     * @param threshold the maxium dimension (either width or height) of the scaled bitmap
+     * @param bitmap                the Bitmap to be scaled
+     * @param threshold             the maxium dimension (either width or height) of the scaled bitmap
      * @param isNecessaryToKeepOrig is it necessary to keep the original bitmap? If not recycle the original bitmap to prevent memory leak.
-     * */
+     */
 
-    public static Bitmap getScaledDownBitmap(Bitmap bitmap, int threshold, boolean isNecessaryToKeepOrig){
+    public static Bitmap getScaledDownBitmap(Bitmap bitmap, int threshold, boolean isNecessaryToKeepOrig) {
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
         int newWidth = width;
         int newHeight = height;
 
-        if(width > height && width > threshold){
+        if (width > height && width > threshold) {
             newWidth = threshold;
-            newHeight = (int)(height * (float)newWidth/width);
+            newHeight = (int) (height * (float) newWidth / width);
         }
 
-        if(width > height && width <= threshold){
+        if (width > height && width <= threshold) {
             //the bitmap is already smaller than our required dimension, no need to resize it
             return bitmap;
         }
 
-        if(width < height && height > threshold){
+        if (width < height && height > threshold) {
             newHeight = threshold;
-            newWidth = (int)(width * (float)newHeight/height);
+            newWidth = (int) (width * (float) newHeight / height);
         }
 
-        if(width < height && height <= threshold){
+        if (width < height && height <= threshold) {
             //the bitmap is already smaller than our required dimension, no need to resize it
             return bitmap;
         }
 
-        if(width == height && width > threshold){
+        if (width == height && width > threshold) {
             newWidth = threshold;
             newHeight = newWidth;
         }
 
-        if(width == height && width <= threshold){
+        if (width == height && width <= threshold) {
             //the bitmap is already smaller than our required dimension, no need to resize it
             return bitmap;
         }
@@ -218,20 +218,20 @@ public class SignatureView extends View implements View.OnTouchListener {
 
         // "RECREATE" THE NEW BITMAP
         Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
-        if(!isNecessaryToKeepOrig){
+        if (!isNecessaryToKeepOrig) {
             bm.recycle();
         }
         return resizedBitmap;
     }
 
-     protected Uri saveImage(Bitmap bm) {
+    protected Uri saveImage(Bitmap bm) {
         File file = null;
-        try{
-            file = new File(getContext().getExternalFilesDir(null),"semnatura.png");
-            if(file.exists()) file.delete();
+        try {
+            file = new File(getContext().getExternalFilesDir(null), "semnatura.png");
+            if (file.exists()) file.delete();
 
-            FileOutputStream outputStream =   new FileOutputStream(file);
-            bm.compress(Bitmap.CompressFormat.PNG,100,outputStream);
+            FileOutputStream outputStream = new FileOutputStream(file);
+            bm.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
             outputStream.flush();
             outputStream.close();
 
@@ -239,12 +239,12 @@ public class SignatureView extends View implements View.OnTouchListener {
             e.printStackTrace();
         }
 
-        if(file!=null) return Uri.fromFile(file);
+        if (file != null) return Uri.fromFile(file);
         else return null;
     }
 
     public Uri getContentDataBMP() {
-        if(signaturePaths.size()<=0) return null;
+        if (signaturePaths.size() <= 0) return null;
 
         setDrawingCacheEnabled(true);
 
@@ -252,7 +252,7 @@ public class SignatureView extends View implements View.OnTouchListener {
         Bitmap cropBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight() - 1);
         bitmap.recycle();
 
-        Bitmap resizedBitmap = getScaledDownBitmap(cropBitmap,400,false);
+        Bitmap resizedBitmap = getScaledDownBitmap(cropBitmap, 400, false);
 //                Bitmap.createScaledBitmap(cropBitmap, 200, 50, true);
         cropBitmap.recycle();
         Uri uri = saveImage(resizedBitmap);
@@ -268,7 +268,7 @@ public class SignatureView extends View implements View.OnTouchListener {
         Bitmap cropBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight() - 1);
         bitmap.recycle();
 
-        Bitmap resizedBitmap = getScaledDownBitmap(cropBitmap,400,false);
+        Bitmap resizedBitmap = getScaledDownBitmap(cropBitmap, 400, false);
         cropBitmap.recycle();
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -281,6 +281,6 @@ public class SignatureView extends View implements View.OnTouchListener {
 
     public String encodeImageURI(Bitmap bm) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        return "data:image/png;base64," + Base64.encodeToString(stream.toByteArray(),Base64.NO_WRAP);
+        return "data:image/png;base64," + Base64.encodeToString(stream.toByteArray(), Base64.NO_WRAP);
     }
 }

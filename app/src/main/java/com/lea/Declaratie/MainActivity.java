@@ -130,12 +130,12 @@ public class MainActivity extends AppCompatActivity {
             //Initializare data de azi
             dataTF.getEditText().setText(dataFormat.format(c.getTime()));
 
-            numeTextInput.getEditText().setText(sharedPreferences.getString("nume",null));
-            ziuaNasteriiTextInput.getEditText().setText(sharedPreferences.getString("zi",null));
-            lunaNasteriiTextInput.getEditText().setText(sharedPreferences.getString("luna",null));
-            anulNasteriiTextInput.getEditText().setText(sharedPreferences.getString("an",null));
-            adresaLocuinteiTextInput.getEditText().setText(sharedPreferences.getString("adresa",null));
-            semnaturaUriString = sharedPreferences.getString("semnatura",null);
+            numeTextInput.getEditText().setText(sharedPreferences.getString("nume", null));
+            ziuaNasteriiTextInput.getEditText().setText(sharedPreferences.getString("zi", null));
+            lunaNasteriiTextInput.getEditText().setText(sharedPreferences.getString("luna", null));
+            anulNasteriiTextInput.getEditText().setText(sharedPreferences.getString("an", null));
+            adresaLocuinteiTextInput.getEditText().setText(sharedPreferences.getString("adresa", null));
+            semnaturaUriString = sharedPreferences.getString("semnatura", null);
         }
 
         if (semnaturaUriString != null) {
@@ -162,12 +162,11 @@ public class MainActivity extends AppCompatActivity {
                                 String anul = anulNasteriiTextInput.getEditText().getText().toString();
 
                                 SharedPreferences.Editor sharedPreferencesEdit = sharedPreferences.edit();
-                                sharedPreferencesEdit.putString("semnatura",semnaturaUriString);
                                 // check to see if all the text fields are filled
                                 if (zi.length() > 0 && luna.length() > 0 && anul.length() > 0) {
-                                    sharedPreferencesEdit.putString("zi",zi);
-                                    sharedPreferencesEdit.putString("luna",luna);
-                                    sharedPreferencesEdit.putString("an",anul);
+                                    sharedPreferencesEdit.putString("zi", zi);
+                                    sharedPreferencesEdit.putString("luna", luna);
+                                    sharedPreferencesEdit.putString("an", anul);
                                     dataNasterii = zi + "/" +
                                             luna + "/" + anul;
                                     String adresaLocutintei = adresaLocuinteiTextInput.getEditText().getText().toString();
@@ -175,8 +174,8 @@ public class MainActivity extends AppCompatActivity {
                                     String data = dataTextInput.getEditText().getText().toString();
 
                                     if (nume.length() > 0 && adresaLocutintei.length() > 0) {
-                                        sharedPreferencesEdit.putString("nume",nume);
-                                        sharedPreferencesEdit.putString("adresa",adresaLocutintei);
+                                        sharedPreferencesEdit.putString("nume", nume);
+                                        sharedPreferencesEdit.putString("adresa", adresaLocutintei);
                                         sharedPreferencesEdit.apply();
 
                                         if (locurileDeplasarii.length() > 0) {
@@ -336,13 +335,14 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         int i = 0;
-                            for (; i < checkedItems.length; i++)
-                                if (checkedItems[i]) {
-                                    motiveDeplasareButon.setIconTintResource(R.color.colorPrimary);
-                                    motiveDeplasareButon.setIcon(getDrawable(R.drawable.ic_check_black_24dp));
-                                    return;
-                                }
-                        if (i==checkedItems.length)  motiveDeplasareButon.setIcon(getDrawable(R.drawable.ic_add_24dp));
+                        for (; i < checkedItems.length; i++)
+                            if (checkedItems[i]) {
+                                motiveDeplasareButon.setIconTintResource(R.color.buttonColor2);
+                                motiveDeplasareButon.setIcon(getDrawable(R.drawable.ic_check_black_24dp));
+                                return;
+                            }
+                        if (i == checkedItems.length)
+                            motiveDeplasareButon.setIcon(getDrawable(R.drawable.ic_add_24dp));
                     }
 
                 });
@@ -437,6 +437,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 File file = new File(getExternalFilesDir(null), "semnatura.png");
                 if (file.exists()) file.delete();
+                semnaturaUriString = null;
                 updateImageView(null);
             }
         });
@@ -497,18 +498,18 @@ public class MainActivity extends AppCompatActivity {
 
         float widthPdfTag = textNormalPaint.measureText(ADRESA_PDF);
         float width = textNormalPaint.measureText(address);
-        float desiredWidth = canvas.getWidth()-70-widthPdfTag;
+        float desiredWidth = canvas.getWidth() - 70 - widthPdfTag;
         //check to see if the address is long
-        if(width< desiredWidth) {
+        if (width < desiredWidth) {
             canvas.drawText(address, x + widthPdfTag, y, textNormalPaint);
         } else {
-            int[] indexes = separateOnTwoRows(address,desiredWidth,textNormalPaint);
+            int[] indexes = separateOnTwoRows(address, desiredWidth, textNormalPaint);
             //separate it on two rows
 
-            canvas.drawText(address.substring(0,indexes[0]), x + widthPdfTag, y, textNormalPaint);
+            canvas.drawText(address.substring(0, indexes[0]), x + widthPdfTag, y, textNormalPaint);
             y = breakLine(y, textNormalPaint, 0.9f);
-            canvas.drawText(address.substring(indexes[1]),x,y,textNormalPaint);
-            }
+            canvas.drawText(address.substring(indexes[1]), x, y, textNormalPaint);
+        }
         y = breakLine(y, helperTextPaint, 0.3f);
 
 
@@ -524,18 +525,18 @@ public class MainActivity extends AppCompatActivity {
         y = breakLine(y, helperTextPaint, 2.2f);
 
         canvas.drawText(LOCUL_DEPLASARII_PDF, x, y, textBoldPaint);
-         widthPdfTag = textNormalPaint.measureText(LOCUL_DEPLASARII_PDF);
-         width = textNormalPaint.measureText(placesToGo);
-         desiredWidth = canvas.getWidth()-70-widthPdfTag;
+        widthPdfTag = textNormalPaint.measureText(LOCUL_DEPLASARII_PDF);
+        width = textNormalPaint.measureText(placesToGo);
+        desiredWidth = canvas.getWidth() - 70 - widthPdfTag;
 
-        if(width< desiredWidth) {
+        if (width < desiredWidth) {
             canvas.drawText(placesToGo, x + textBoldPaint.measureText(LOCUL_DEPLASARII_PDF), y, textNormalPaint);
         } else {
-            int[] indexes = separateOnTwoRows(placesToGo,desiredWidth,textNormalPaint);
+            int[] indexes = separateOnTwoRows(placesToGo, desiredWidth, textNormalPaint);
             //separate it on two rows
-            canvas.drawText(placesToGo.substring(0,indexes[0]), x + widthPdfTag, y, textNormalPaint);
+            canvas.drawText(placesToGo.substring(0, indexes[0]), x + widthPdfTag, y, textNormalPaint);
             y = breakLine(y, textNormalPaint, 0.9f);
-            canvas.drawText(placesToGo.substring(indexes[1]),x,y,textNormalPaint);
+            canvas.drawText(placesToGo.substring(indexes[1]), x, y, textNormalPaint);
         }
         y = breakLine(y, helperTextPaint, 0.3f);
 
@@ -629,7 +630,7 @@ public class MainActivity extends AppCompatActivity {
 
         //write to outputstream
         try {
-            if(myFile.exists()) myFile.delete();
+            if (myFile.exists()) myFile.delete();
             myPdfDocument.writeTo(new FileOutputStream(myFile));
         } catch (Exception e) {
             e.printStackTrace();
@@ -645,23 +646,28 @@ public class MainActivity extends AppCompatActivity {
         int i = 0;
         int indexComma = 0;
         int indexSpace = 0;
-        for(;total<=desiredWidth;i++) {
+        for (; total <= desiredWidth; i++) {
             char c = text.charAt(i);
             total += textNormalPaint.measureText(Character.toString(c));
-            if(c==' ') indexSpace = i;
-            if(c==',') indexComma = i;
+            if (c == ' ') indexSpace = i;
+            if (c == ',') indexComma = i;
         }
 
         int index1 = 0;
         int index2 = 0;
 
-        if(indexSpace>indexComma) { index1 = indexSpace; index2 = indexSpace+1; }
-        else if(indexComma > indexSpace){ index1 = indexComma;  if(index1 +1 == indexSpace) index2 = index1+1; else index2 = indexComma;}
-        else {
+        if (indexSpace > indexComma) {
+            index1 = indexSpace;
+            index2 = indexSpace + 1;
+        } else if (indexComma > indexSpace) {
+            index1 = indexComma;
+            if (index1 + 1 == indexSpace) index2 = index1 + 1;
+            else index2 = indexComma;
+        } else {
             index1 = i;
             index2 = i;
         }
-        return new int[] {index1,index2};
+        return new int[]{index1, index2};
     }
 
 
@@ -700,7 +706,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     protected void updateImageView(Uri uriSemnatura) {
         if (uriSemnatura != null) {
             semnaturaUriString = uriSemnatura.toString();
@@ -725,5 +730,11 @@ public class MainActivity extends AppCompatActivity {
         semnaturaButon.setVisibility(View.VISIBLE);
         semnaturaImageView.setVisibility(View.INVISIBLE);
         imageButtonRemove.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        sharedPreferences.edit().putString("semnatura", semnaturaUriString).apply();
     }
 }
