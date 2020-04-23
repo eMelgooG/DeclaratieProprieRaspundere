@@ -333,7 +333,7 @@ public class MainActivity extends AppCompatActivity {
                 if (inputMethodManager != null)
                     inputMethodManager.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
 
-                final boolean[] isOk = new boolean[2];
+                final boolean[] isOk = new boolean[1];
 
                 final AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
                 mBuilder.setTitle("Alege cel puțin o variantă");
