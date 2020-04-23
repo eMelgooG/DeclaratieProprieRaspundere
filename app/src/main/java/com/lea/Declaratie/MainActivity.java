@@ -494,8 +494,23 @@ public class MainActivity extends AppCompatActivity {
         y = breakLine(y, textNormalPaint, 1.1f);
 
         canvas.drawText(ADRESA_PDF, x, y, textBoldPaint);
-        canvas.drawText(address, x + textNormalPaint.measureText(ADRESA_PDF), y, textNormalPaint);
+
+        float widthPdfTag = textNormalPaint.measureText(ADRESA_PDF);
+        float width = textNormalPaint.measureText(address);
+        float desiredWidth = canvas.getWidth()-70-widthPdfTag;
+        //check to see if the address is long
+        if(width< desiredWidth) {
+            canvas.drawText(address, x + widthPdfTag, y, textNormalPaint);
+        } else {
+            int[] indexes = separateOnTwoRows(address,desiredWidth,textNormalPaint);
+            //separate it on two rows
+
+            canvas.drawText(address.substring(0,indexes[0]), x + widthPdfTag, y, textNormalPaint);
+            y = breakLine(y, textNormalPaint, 0.9f);
+            canvas.drawText(address.substring(indexes[1]),x,y,textNormalPaint);
+            }
         y = breakLine(y, helperTextPaint, 0.3f);
+
 
         //Helper pentru adresa
         TextPaint mTextPaint = new TextPaint(helperTextPaint);
@@ -509,7 +524,19 @@ public class MainActivity extends AppCompatActivity {
         y = breakLine(y, helperTextPaint, 2.2f);
 
         canvas.drawText(LOCUL_DEPLASARII_PDF, x, y, textBoldPaint);
-        canvas.drawText(placesToGo, x + textBoldPaint.measureText(LOCUL_DEPLASARII_PDF), y, textNormalPaint);
+         widthPdfTag = textNormalPaint.measureText(LOCUL_DEPLASARII_PDF);
+         width = textNormalPaint.measureText(placesToGo);
+         desiredWidth = canvas.getWidth()-70-widthPdfTag;
+
+        if(width< desiredWidth) {
+            canvas.drawText(placesToGo, x + textBoldPaint.measureText(LOCUL_DEPLASARII_PDF), y, textNormalPaint);
+        } else {
+            int[] indexes = separateOnTwoRows(placesToGo,desiredWidth,textNormalPaint);
+            //separate it on two rows
+            canvas.drawText(placesToGo.substring(0,indexes[0]), x + widthPdfTag, y, textNormalPaint);
+            y = breakLine(y, textNormalPaint, 0.9f);
+            canvas.drawText(placesToGo.substring(indexes[1]),x,y,textNormalPaint);
+        }
         y = breakLine(y, helperTextPaint, 0.3f);
 
         //Helper text locul deplasarii
@@ -602,6 +629,7 @@ public class MainActivity extends AppCompatActivity {
 
         //write to outputstream
         try {
+            if(myFile.exists()) myFile.delete();
             myPdfDocument.writeTo(new FileOutputStream(myFile));
         } catch (Exception e) {
             e.printStackTrace();
@@ -610,6 +638,30 @@ public class MainActivity extends AppCompatActivity {
         }
         myPdfDocument.close();
         return true;
+    }
+
+    private int[] separateOnTwoRows(String text, float desiredWidth, Paint textNormalPaint) {
+        float total = 0;
+        int i = 0;
+        int indexComma = 0;
+        int indexSpace = 0;
+        for(;total<=desiredWidth;i++) {
+            char c = text.charAt(i);
+            total += textNormalPaint.measureText(Character.toString(c));
+            if(c==' ') indexSpace = i;
+            if(c==',') indexComma = i;
+        }
+
+        int index1 = 0;
+        int index2 = 0;
+
+        if(indexSpace>indexComma) { index1 = indexSpace; index2 = indexSpace+1; }
+        else if(indexComma > indexSpace){ index1 = indexComma;  if(index1 +1 == indexSpace) index2 = index1+1; else index2 = indexComma;}
+        else {
+            index1 = i;
+            index2 = i;
+        }
+        return new int[] {index1,index2};
     }
 
 
@@ -673,10 +725,5 @@ public class MainActivity extends AppCompatActivity {
         semnaturaButon.setVisibility(View.VISIBLE);
         semnaturaImageView.setVisibility(View.INVISIBLE);
         imageButtonRemove.setVisibility(View.INVISIBLE);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
     }
 }
