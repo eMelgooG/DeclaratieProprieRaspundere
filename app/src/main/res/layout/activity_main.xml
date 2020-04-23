@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:background="@color/white"
+    android:background="@color/backgroundColor"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,6 +28,7 @@
             app:layout_constraintTop_toBottomOf="@id/titluTV">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:background="@color/textLayoutBackground"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:imeOptions="flagNoExtractUi"
@@ -78,6 +79,7 @@
             app:layout_constraintTop_toBottomOf="@+id/numPrenumeTF">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:background="@color/textLayoutBackground"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:digits="0123456789"
@@ -106,6 +108,7 @@
             app:layout_constraintTop_toBottomOf="@+id/numPrenumeTF">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:background="@color/textLayoutBackground"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:digits="0123456789"
@@ -133,6 +136,7 @@
             app:layout_constraintTop_toBottomOf="@+id/numPrenumeTF">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:background="@color/textLayoutBackground"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:digits="0123456789"
@@ -161,6 +165,7 @@
             app:layout_constraintTop_toBottomOf="@id/dataNasteriiTF">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:background="@color/textLayoutBackground"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:imeOptions="flagNoExtractUi"
@@ -184,6 +189,7 @@
             app:layout_constraintTop_toBottomOf="@id/adresaTF">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:background="@color/textLayoutBackground"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:imeOptions="flagNoExtractUi"
@@ -205,6 +211,7 @@
 
         <com.google.android.material.button.MaterialButton
             style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+            android:background="@color/textLayoutBackground"
             android:id="@+id/motiveleDeplasariiButon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -235,6 +242,7 @@
             app:layout_constraintTop_toBottomOf="@id/deplasareTF">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:background="@color/textLayoutBackground"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:imeOptions="flagNoExtractUi"
@@ -243,6 +251,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
+            android:background="@color/textLayoutBackground"
             android:id="@+id/semnaturaButon"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
             android:layout_width="wrap_content"
@@ -254,6 +263,7 @@
             app:layout_constraintTop_toBottomOf="@id/motiveleDeplasariiButon" />
 
         <com.google.android.material.button.MaterialButton
+            android:textColor="@color/textLayoutBackground"
             android:id="@+id/geneatePdfButon"
             style="@style/Widget.MaterialComponents.Button"
             android:layout_width="wrap_content"
@@ -265,6 +275,7 @@
 
         <ImageView
             android:id="@+id/imageViewSemnatura"
+            android:background="@color/textLayoutBackground"
             android:layout_width="120dp"
             android:layout_height="36dp"
             android:layout_marginTop="6dp"
@@ -277,7 +288,7 @@
             android:id="@+id/imageButtonRemove"
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:background="@color/white"
+            android:background="@color/textLayoutBackground"
             android:src="@drawable/ic_rem_icon"
             android:visibility="gone"
             app:layout_constraintLeft_toRightOf="@id/imageViewSemnatura"
