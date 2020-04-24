@@ -36,8 +36,6 @@ public class SignatureViewDemoDialog extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         ((MainActivity) getActivity()).updateImageView(signatureView.getContentDataBMP());
-
-                        // TODO data storage here
                     }
                 })
                 .setNeutralButton("Șterge", null);

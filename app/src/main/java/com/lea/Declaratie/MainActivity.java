@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
     Calendar c = Calendar.getInstance();
     SharedPreferences sharedPreferences;
     private static String semnaturaUriString = null;
+    private String locurileDeplasarii = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,13 +130,14 @@ public class MainActivity extends AppCompatActivity {
             checkedItems = new boolean[listaMotive.length];
             //Initializare data de azi
             dataTF.getEditText().setText(dataFormat.format(c.getTime()));
-
+            locurileDeplasarii = sharedPreferences.getString("locuri",null);
             numeTextInput.getEditText().setText(sharedPreferences.getString("nume", null));
             ziuaNasteriiTextInput.getEditText().setText(sharedPreferences.getString("zi", null));
             lunaNasteriiTextInput.getEditText().setText(sharedPreferences.getString("luna", null));
             anulNasteriiTextInput.getEditText().setText(sharedPreferences.getString("an", null));
             adresaLocuinteiTextInput.getEditText().setText(sharedPreferences.getString("adresa", null));
             semnaturaUriString = sharedPreferences.getString("semnatura", null);
+            locurileDeplasariiTextInput.getEditText().setText(locurileDeplasarii);
         }
 
         if (semnaturaUriString != null) {
@@ -170,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
                                     dataNasterii = zi + "/" +
                                             luna + "/" + anul;
                                     String adresaLocutintei = adresaLocuinteiTextInput.getEditText().getText().toString();
-                                    String locurileDeplasarii = locurileDeplasariiTextInput.getEditText().getText().toString();
+                                     locurileDeplasarii = locurileDeplasariiTextInput.getEditText().getText().toString();
                                     String data = dataTextInput.getEditText().getText().toString();
 
                                     if (nume.length() > 0 && adresaLocutintei.length() > 0) {
@@ -196,6 +198,7 @@ public class MainActivity extends AppCompatActivity {
                                                 }
                                                 // try to create the pdf
                                                 if (generatePdf(nume, dataNasterii, adresaLocutintei, locurileDeplasarii, data, motive)) {
+                                                    sharedPreferencesEdit.putString("locuri",locurileDeplasarii);
                                                     //Open pdf
                                                     try {
                                                         Intent pdfOpenintent = new Intent(Intent.ACTION_VIEW);
