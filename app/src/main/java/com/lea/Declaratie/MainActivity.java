@@ -198,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
                                                 }
                                                 // try to create the pdf
                                                 if (generatePdf(nume, dataNasterii, adresaLocutintei, locurileDeplasarii, data, motive)) {
-                                                    sharedPreferencesEdit.putString("locuri",locurileDeplasarii);
+                                                    sharedPreferencesEdit.putString("locuri",locurileDeplasarii).apply();
                                                     //Open pdf
                                                     try {
                                                         Intent pdfOpenintent = new Intent(Intent.ACTION_VIEW);
