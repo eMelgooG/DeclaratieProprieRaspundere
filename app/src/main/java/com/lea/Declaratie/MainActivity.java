@@ -145,13 +145,6 @@ public class MainActivity extends AppCompatActivity {
             updateImageView(uri);
         }
         //Listeners
-        //We ask for permission to WRITE
-        Dexter.withActivity(this)
-                .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                .withListener(new PermissionListener() {
-                    @Override
-                    public void onPermissionGranted(PermissionGrantedResponse response) {
-                        //We set listener to the generate pdf button and generate the PDF if it passes all the filters
                         generarePdfButon.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -251,49 +244,6 @@ public class MainActivity extends AppCompatActivity {
                                 dialog.show(getFragmentManager(), "semnaturaFragment");
                             }
                         });
-                    }
-
-                    @Override
-                    public void onPermissionDenied(PermissionDeniedResponse response) {
-
-                        if (response.isPermanentlyDenied()) {
-                            generarePdfButon.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Toast.makeText(getApplicationContext(), "Nu am permisiune să creez fișierul. Reinstalează aplicația și selectează Allow!", Toast.LENGTH_LONG).show();
-                                }
-                            });
-
-                            semnaturaButon.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Toast.makeText(getApplicationContext(), "Nu am permisiune să creez fișierul. Reinstalează aplicația și selectează Allow!", Toast.LENGTH_LONG).show();
-                                }
-                            });
-                        } else {
-                            generarePdfButon.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Toast.makeText(getApplicationContext(), "Nu am permisiune să creez fișierul. Restartează aplicația și selectează Allow!", Toast.LENGTH_LONG).show();
-                                }
-                            });
-
-                            semnaturaButon.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Toast.makeText(getApplicationContext(), "Nu am permisiune să creez fișierul. Restartează aplicația și selectează Allow!", Toast.LENGTH_LONG).show();
-                                }
-                            });
-                        }
-                    }
-
-                    @Override
-                    public void onPermissionRationaleShouldBeShown(PermissionRequest permission, final PermissionToken token) {
-                        //continue asking for permission when app reopens
-                        token.continuePermissionRequest();
-                    }
-                })
-                .check();
 
         //Afisarea iconiteti cu calendar din text field-ul 'Data' si afisarea calendarului
         dataTF.setEndIconOnClickListener(new View.OnClickListener() {
@@ -438,7 +388,7 @@ public class MainActivity extends AppCompatActivity {
         imageButtonRemove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                File file = new File(getExternalFilesDir(null), "semnatura.png");
+                File file = new File(getFilesDir(), "semnatura.png");
                 if (file.exists()) file.delete();
                 semnaturaUriString = null;
                 updateImageView(null);
