@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Properties
     String[] listaMotive;
+    String[] listMotivePdf;
     boolean[] checkedItems;
     SimpleDateFormat dataFormat = new SimpleDateFormat("dd/MM/yyyy"); //default: data de azi
     Calendar c = Calendar.getInstance();
@@ -113,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize variables
         listaMotive = getResources().getStringArray(R.array.motivele_deplasarii);
+        listMotivePdf = getResources().getStringArray(R.array.motivele_deplasarii_pdf);
 
         //Reinitialize the state if configuration change occurs
         if (savedInstanceState != null) {
@@ -275,7 +277,7 @@ public class MainActivity extends AppCompatActivity {
                 final boolean[] isOk = new boolean[1];
 
                 final AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
-                mBuilder.setTitle("Alege cel puțin o variantă");
+                mBuilder.setTitle("Alege cel puțin o variantă:");
 
                 mBuilder.setMultiChoiceItems(listaMotive, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
@@ -633,10 +635,10 @@ public class MainActivity extends AppCompatActivity {
         boolean x = false;
         for (int i = 0; i < checkedItems.length; i++) {
             if (checkedItems[i]) {
-                motive.append(positiveCheckbox + listaMotive[i]);
+                motive.append(positiveCheckbox + listMotivePdf[i]);
                 x = true;
             } else {
-                motive.append(negativeCheckbox + listaMotive[i]);
+                motive.append(negativeCheckbox + listMotivePdf[i]);
             }
             motive.append("\n");
         }
