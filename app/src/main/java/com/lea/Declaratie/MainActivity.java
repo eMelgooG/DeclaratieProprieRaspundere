@@ -351,10 +351,10 @@ public class MainActivity extends AppCompatActivity {
         boolean x = false;
         for (int i = 0; i < checkedItems.length; i++) {
             if (checkedItems[i]) {
-                motive.append(Helper.positiveCheckbox + listMotivePdf[i]);
+                motive.append(Helper.positiveCheckbox + listMotivePdf[i] + '\n');
                 x = true;
             } else {
-                motive.append(Helper.negativeCheckbox + listMotivePdf[i]);
+                motive.append(Helper.negativeCheckbox + listMotivePdf[i] + '\n');
             }
             motive.append("\n");
         }

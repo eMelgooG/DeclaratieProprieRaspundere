@@ -24,23 +24,21 @@ public class Helper {
 
     //Constants
      static final String TITLU_PDF = "DECLARAȚIE PE PROPRIE RĂSPUNDERE",
-            DATA_NASTERII_PDF = "născut/ă în data de:                             în localitatea ",
+            DATA_NASTERII_PDF = "născut/ă în data de:                                       în localitatea ",
             NUME_PDF = "Subsemnatul/a: ",
             DOMICILIU_PDF = "domiciliat/ă în:  ",
             RESEDINTA_PDF = "cu reședința în fapt în:  ",
             MOTIVE_HELPER_PDF = "declar pe proprie răspundere, cunoscând prevederile articolului 326 din Codul Penal privind falsul în declarații, că mă deplasez în afara locuinței, " +
                     "în intervalul orar 23.00 – 05.00, din următorul/" +
                     " următoarele motive:",
-            HELPER_FINAL_PDF = "*Declarația pe propria răspundere poate fi scrisă de mână, cu condiția preluării tuturor elementelor prezentate mai sus." +
-                    "**Declarația pe propria răspundere poate fi stocată și prezentată pentru control pe dispozitive electronice mobile, cu" +
-                    "condiția ca pe documentul prezentat să existe semnătura olografă a persoanei care folosește Declarația și data pentru care" +
+            HELPER_FINAL_PDF = "*Declarația pe propria răspundere poate fi scrisă de mână, cu condiția preluării tuturor elementelor prezentate mai sus.\n" +
+                    "**Declarația pe propria răspundere poate fi stocată și prezentată pentru control pe dispozitive electronice mobile, cu " +
+                    "condiția ca pe documentul prezentat să existe semnătura olografă a persoanei care folosește Declarația și data pentru care " +
                     "este valabilă declarația.",
-            LOCUL_DEPLASARII_PDF = "Locul/locurile deplasării: ",
-            MOTIVUL_PDF = "Motivul/motivele deplasării: ",
             DATA_PDF = "Data",
             SEMNATURA_PDF = "Semnătura",
-           positiveCheckbox = "(X)",
-            negativeCheckbox = "()";
+           positiveCheckbox = "(X) ",
+            negativeCheckbox = "( ) ";
 
 
 
@@ -60,12 +58,12 @@ public class Helper {
         //text normal
         Paint textNormalPaint = new Paint();
         textNormalPaint.setTypeface(Typeface.SANS_SERIF);
-        textNormalPaint.setTextSize(15f);
+        textNormalPaint.setTextSize(13.5f);
 
         //text bold
         Paint textBoldPaint = new Paint();
         textBoldPaint.setTypeface(Typeface.SANS_SERIF);
-        textBoldPaint.setTextSize(15f);
+        textBoldPaint.setTextSize(13.5f);
         textBoldPaint.setFakeBoldText(true);
 
         //Motive text
@@ -79,22 +77,22 @@ public class Helper {
 
         Canvas canvas = myPage.getCanvas();
         float y = 85;
-        float x = 60;
+        float x = 54;
         float z = x+ textNormalPaint.measureText(RESEDINTA_PDF);
         //draw title
         canvas.drawText(TITLU_PDF, myPageInfo.getPageWidth() / 2, y, titluPaint);
-        y = breakLine(y, titluPaint, 1.7f);
+        y = breakLine(y, titluPaint, 2.2f);
 
         //draw name, birth date, address
         canvas.drawText(NUME_PDF, x, y, textBoldPaint);
         canvas.drawText(name, z, y, textNormalPaint);
-        y = breakLine(y, textNormalPaint, 1.5f);
+        y = breakLine(y, textNormalPaint, 1.8f);
 
         canvas.drawText(DOMICILIU_PDF, x, y, textNormalPaint);
-        y = breakLine(y, textNormalPaint, 1.5f);
+        y = breakLine(y, textNormalPaint, 1.8f);
 
         canvas.drawText(RESEDINTA_PDF, x, y, textNormalPaint);
-        y = breakLine(y, textNormalPaint, 1.5f);
+        y = breakLine(y, textNormalPaint, 1.8f);
 
         canvas.drawText(DATA_NASTERII_PDF, x, y, textNormalPaint);
         canvas.drawText(birthDate, z, y, textNormalPaint);
@@ -123,7 +121,7 @@ public class Helper {
 //        Helper pentru motive
         canvas.save();
        TextPaint mTextPaint = new TextPaint(helperTextPaint);
-        TextPaint mTextNormalPaint = new TextPaint(textMotivePaint);
+        TextPaint mTextNormalPaint = new TextPaint(textNormalPaint);
        mTextLayout = new StaticLayout(MOTIVE_HELPER_PDF, mTextNormalPaint, canvas.getWidth() - 120, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
         canvas.translate(x, y);
         mTextLayout.draw(canvas);
@@ -136,8 +134,8 @@ public class Helper {
 //        mTextLayout.draw(canvas);
 //        canvas.restore();
 
-        y = y + mTextPaint.getTextSize() * 2 + 1f;
-        y = breakLine(y, helperTextPaint, 2.2f);
+        y = y + mTextNormalPaint.getTextSize() * 6+ 1f;
+//        y = breakLine(y, helperTextPaint, 2.2f);
 
 //        canvas.drawText(LOCUL_DEPLASARII_PDF, x, y, textBoldPaint);
 //        widthPdfTag = textNormalPaint.measureText(LOCUL_DEPLASARII_PDF);
@@ -162,31 +160,28 @@ public class Helper {
 //        mTextLayout.draw(canvas);
 //        canvas.restore();
 
-        y = y + mTextPaint.getTextSize() * 2 + 1f;
-        y = breakLine(y, helperTextPaint, 2.2f);
-
-        canvas.drawText(MOTIVUL_PDF, x, y, textBoldPaint);
-        y = breakLine(y, helperTextPaint, 0.3f);
+//        y = y + mTextPaint.getTextSize() * 2 + 1f;
+//        y = breakLine(y, helperTextPaint, 2.2f);
 
         //Scrie motivele
         mTextPaint = new TextPaint(textMotivePaint);
-        mTextLayout = new StaticLayout(motive, mTextPaint, canvas.getWidth() - 70, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.5f, false);
+        mTextLayout = new StaticLayout(motive, mTextPaint, canvas.getWidth() - 100, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.5f, false);
         canvas.save();
-        canvas.translate(x, y);
+        canvas.translate(x+16, y);
         mTextLayout.draw(canvas);
         canvas.restore();
 
         y = y + mTextLayout.getHeight() - mTextPaint.getTextSize();
 
-        //Helper text la motive
-        mTextPaint = new TextPaint(helperTextPaint);
-        mTextLayout = new StaticLayout(MOTIVE_HELPER_PDF, mTextPaint, canvas.getWidth() - 70, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0f, false);
-        canvas.save();
-        canvas.translate(x, y);
-        mTextLayout.draw(canvas);
-        canvas.restore();
-
-        y = y + mTextLayout.getHeight() - mTextPaint.getTextSize();
+//        //Helper text la motive
+//        mTextPaint = new TextPaint(helperTextPaint);
+//        mTextLayout = new StaticLayout(MOTIVE_HELPER_PDF, mTextPaint, canvas.getWidth() - 70, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0f, false);
+//        canvas.save();
+//        canvas.translate(x, y);
+//        mTextLayout.draw(canvas);
+//        canvas.restore();
+//
+//        y = y + mTextLayout.getHeight() - mTextPaint.getTextSize();
 
         //Data
         x = x + 35;
@@ -224,13 +219,13 @@ public class Helper {
 
 
         //reset x and y
-        x = 40;
+        x = 60;
         y = y + 70;
 
         //add last helper text in bold
-        mTextPaint.setFakeBoldText(true);
-        mTextPaint.setTextSize(11.5f);
-        mTextLayout = new StaticLayout(HELPER_FINAL_PDF, mTextPaint, canvas.getWidth() - 70, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0f, false);
+        mTextPaint.setFakeBoldText(false);
+        mTextPaint.setTextSize(9.5f);
+        mTextLayout = new StaticLayout(HELPER_FINAL_PDF, mTextPaint, canvas.getWidth() - 100, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0f, false);
         canvas.save();
         canvas.translate(x, y);
         mTextLayout.draw(canvas);
