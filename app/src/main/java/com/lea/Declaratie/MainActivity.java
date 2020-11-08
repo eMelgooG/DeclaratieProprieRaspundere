@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     //Views
-    TextInputLayout numeTextInput, ziuaNasteriiTextInput, lunaNasteriiTextInput, anulNasteriiTextInput, adresaLocuinteiTextInput, locurileDeplasariiTextInput, dataTextInput, dataTF;
+    TextInputLayout numeTextInput, ziuaNasteriiTextInput, lunaNasteriiTextInput, anulNasteriiTextInput, domiciliuTextInput, resedintaTextInput, dataTF;
     MaterialButton motiveDeplasareButon, generarePdfButon, semnaturaButon;
     ImageView semnaturaImageView;
     ImageButton imageButtonRemove;
@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     Calendar c = Calendar.getInstance();
     SharedPreferences sharedPreferences;
     static String semnaturaUriString = null;
-    private String locurileDeplasarii = null;
+    private String resedinta = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,9 +63,8 @@ public class MainActivity extends AppCompatActivity {
         ziuaNasteriiTextInput = findViewById(R.id.ziNastereTF);
         lunaNasteriiTextInput = findViewById(R.id.lunaNastereTF);
         anulNasteriiTextInput = findViewById(R.id.anNastereTF);
-        adresaLocuinteiTextInput = findViewById(R.id.domiciliuTF);
-        locurileDeplasariiTextInput = findViewById(R.id.resedintaTF);
-        dataTextInput = findViewById(R.id.dataTF);
+        domiciliuTextInput = findViewById(R.id.domiciliuTF);
+        resedintaTextInput = findViewById(R.id.resedintaTF);
         dataTF = findViewById(R.id.dataTF);
 
         //Initialize other views
@@ -85,24 +84,23 @@ public class MainActivity extends AppCompatActivity {
             ziuaNasteriiTextInput.getEditText().setText(savedInstanceState.getString("zi"));
             lunaNasteriiTextInput.getEditText().setText(savedInstanceState.getString("luna"));
             anulNasteriiTextInput.getEditText().setText(savedInstanceState.getString("an"));
-            adresaLocuinteiTextInput.getEditText().setText(savedInstanceState.getString("adresa"));
-            locurileDeplasariiTextInput.getEditText().setText(savedInstanceState.getString("locuri"));
+            domiciliuTextInput.getEditText().setText(savedInstanceState.getString("domiciliu"));
+            resedintaTextInput.getEditText().setText(savedInstanceState.getString("resedinta"));
             checkedItems = savedInstanceState.getBooleanArray("motive");
-            dataTextInput.getEditText().setText(savedInstanceState.getString("data"));
+            dataTF.getEditText().setText(savedInstanceState.getString("data"));
             semnaturaUriString = savedInstanceState.getString("semnatura");
         } else {
             //Otherwise update everything
             checkedItems = new boolean[listaMotive.length];
             //Initializare data de azi
             dataTF.getEditText().setText(dataFormat.format(c.getTime()));
-            locurileDeplasarii = sharedPreferences.getString("locuri",null);
             numeTextInput.getEditText().setText(sharedPreferences.getString("nume", null));
             ziuaNasteriiTextInput.getEditText().setText(sharedPreferences.getString("zi", null));
             lunaNasteriiTextInput.getEditText().setText(sharedPreferences.getString("luna", null));
             anulNasteriiTextInput.getEditText().setText(sharedPreferences.getString("an", null));
-            adresaLocuinteiTextInput.getEditText().setText(sharedPreferences.getString("adresa", null));
+            domiciliuTextInput.getEditText().setText(sharedPreferences.getString("domiciliu", null));
             semnaturaUriString = sharedPreferences.getString("semnatura", null);
-            locurileDeplasariiTextInput.getEditText().setText(locurileDeplasarii);
+            resedintaTextInput.getEditText().setText(resedinta = sharedPreferences.getString("resedinta",null););
         }
 
         if (semnaturaUriString != null) {
@@ -130,16 +128,16 @@ public class MainActivity extends AppCompatActivity {
                                     sharedPreferencesEdit.putString("an", anul);
                                     dataNasterii = zi + "/" +
                                             luna + "/" + anul;
-                                    String adresaLocutintei = adresaLocuinteiTextInput.getEditText().getText().toString();
-                                     locurileDeplasarii = locurileDeplasariiTextInput.getEditText().getText().toString();
-                                    String data = dataTextInput.getEditText().getText().toString();
+                                    String domiciliu = domiciliuTextInput.getEditText().getText().toString();
+                                     resedinta = resedintaTextInput.getEditText().getText().toString();
+                                    String data = dataTF.getEditText().getText().toString();
 
-                                    if (nume.length() > 0 && adresaLocutintei.length() > 0) {
+                                    if (nume.length() > 0 && domiciliu.length() > 0) {
                                         sharedPreferencesEdit.putString("nume", nume);
-                                        sharedPreferencesEdit.putString("adresa", adresaLocutintei);
+                                        sharedPreferencesEdit.putString("domiciliu", domiciliu);
                                         sharedPreferencesEdit.apply();
 
-                                        if (locurileDeplasarii.length() > 0) {
+                                        if (resedinta.length() > 0) {
 
                                             // check to see if there are any reasons selected and also retrieve the Motivele in String format to write to to the PDF
                                             String motive = getMotive();
@@ -152,12 +150,12 @@ public class MainActivity extends AppCompatActivity {
 
                                                 if (data.length() < 8) {
                                                     Toast.makeText(getApplicationContext(), "Data introdusă este invalidă!", Toast.LENGTH_SHORT).show();
-                                                    dataTextInput.requestFocus();
+                                                    dataTF.requestFocus();
                                                     return;
                                                 }
                                                 // try to create the pdf
-                                                if (Helper.generatePdf(nume, dataNasterii, adresaLocutintei, locurileDeplasarii, data, motive,MainActivity.this)) {
-                                                    sharedPreferencesEdit.putString("locuri",locurileDeplasarii).apply();
+                                                if (Helper.generatePdf(nume, dataNasterii, domiciliu, resedinta, data, motive,MainActivity.this)) {
+                                                    sharedPreferencesEdit.putString("resedinta",resedinta).apply();
                                                     //Open pdf
                                                     try {
                                                         Intent pdfOpenintent = new Intent(Intent.ACTION_VIEW);
@@ -344,7 +342,7 @@ public class MainActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 if (anulNasteriiTextInput.getEditText().getText().toString().length() == 4) {
                     if (anulNasteriiTextInput.getEditText().getSelectionEnd() == 4) {
-                        adresaLocuinteiTextInput.requestFocus();
+                        domiciliuTextInput.requestFocus();
                         anulNasteriiTextInput.setErrorEnabled(false);
                     }
                 }
@@ -391,8 +389,8 @@ public class MainActivity extends AppCompatActivity {
         outState.putString("zi", ziuaNasteriiTextInput.getEditText().getText().toString());
         outState.putString("luna", lunaNasteriiTextInput.getEditText().getText().toString());
         outState.putString("an", anulNasteriiTextInput.getEditText().getText().toString());
-        outState.putString("adresa", adresaLocuinteiTextInput.getEditText().getText().toString());
-        outState.putString("locuri", locurileDeplasariiTextInput.getEditText().getText().toString());
+        outState.putString("domiciliu", domiciliuTextInput.getEditText().getText().toString());
+        outState.putString("resedinta", resedintaTextInput.getEditText().getText().toString());
         outState.putBooleanArray("motive", checkedItems);
         outState.putString("data", dataTF.getEditText().getText().toString());
         outState.putString("semnatura", semnaturaUriString);
