@@ -2,32 +2,18 @@ package com.lea.Declaratie;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
-import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.Layout;
-import android.text.StaticLayout;
-import android.text.TextPaint;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -39,21 +25,10 @@ import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
-import com.karumi.dexter.Dexter;
-import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.PermissionDeniedResponse;
-import com.karumi.dexter.listener.PermissionGrantedResponse;
-import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.single.PermissionListener;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -84,12 +59,12 @@ public class MainActivity extends AppCompatActivity {
         sharedPreferences = this.getSharedPreferences("com.lea.Declaratie", Context.MODE_PRIVATE);
 
         //Initialize text inputs
-        numeTextInput = findViewById(R.id.numPrenumeTF);
+        numeTextInput = findViewById(R.id.subsemnatulTF);
         ziuaNasteriiTextInput = findViewById(R.id.ziNastereTF);
         lunaNasteriiTextInput = findViewById(R.id.lunaNastereTF);
         anulNasteriiTextInput = findViewById(R.id.anNastereTF);
-        adresaLocuinteiTextInput = findViewById(R.id.adresaTF);
-        locurileDeplasariiTextInput = findViewById(R.id.deplasareTF);
+        adresaLocuinteiTextInput = findViewById(R.id.domiciliuTF);
+        locurileDeplasariiTextInput = findViewById(R.id.resedintaTF);
         dataTextInput = findViewById(R.id.dataTF);
         dataTF = findViewById(R.id.dataTF);
 

@@ -10,15 +10,28 @@
         android:layout_height="match_parent"
         tools:context=".MainActivity">
 
+        <TextView
+            android:id="@+id/titluTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/ds"
+            android:text="Declarație pe proprie răspundere"
+            android:textColor="@color/black"
+            android:textSize="30sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/numPrenumeTF"
+            android:id="@+id/subsemnatulTF"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_regular_textfield"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="@dimen/margin_regular_textfield"
-            android:hint="Nume și prenume"
+            android:hint="Subsemnatul/a:"
             android:textColorHint="@color/gray"
             app:boxBackgroundColor="#F3F5F6"
             app:hintTextColor="@color/gray"
@@ -32,10 +45,57 @@
                 android:layout_height="wrap_content"
                 android:imeOptions="flagNoExtractUi"
                 android:inputType="textCapWords|textShortMessage" />
-
-
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/domiciliuTF"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_regular_textfield"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="@dimen/margin_regular_textfield"
+            android:hint="domiciliat/ă în:"
+            app:endIconMode="clear_text"
+            android:textColorHint="@color/gray"
+            app:boxBackgroundColor="#F3F5F6"
+            app:hintTextColor="@color/gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/subsemnatulTF">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:background="@color/textLayoutBackground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="flagNoExtractUi"
+                android:inputType="textShortMessage|textCapSentences" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/resedintaTF"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_regular_textfield"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="@dimen/margin_regular_textfield"
+            android:hint="cu reședința în fapt în: "
+            app:endIconMode="clear_text"
+            android:textColorHint="@color/gray"
+            app:boxBackgroundColor="#F3F5F6"
+            app:hintTextColor="@color/gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/domiciliuTF">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:background="@color/textLayoutBackground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="flagNoExtractUi"
+                android:inputType="textShortMessage|textCapSentences" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/dataNasteriiTF"
@@ -49,7 +109,7 @@
             app:layout_constraintEnd_toStartOf="@+id/ziNastereTF"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/numPrenumeTF">
+            app:layout_constraintTop_toBottomOf="@+id/resedintaTF">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="wrap_content"
@@ -57,7 +117,7 @@
                 android:alpha="0.8"
                 android:enabled="false"
                 android:paddingTop="16dp"
-                android:text="Data nașterii:"
+                android:text="născut/ă în: "
                 android:textColor="@color/black" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -75,7 +135,7 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_weight="1.5"
             app:layout_constraintStart_toEndOf="@+id/dataNasteriiTF"
-            app:layout_constraintTop_toBottomOf="@+id/numPrenumeTF">
+            app:layout_constraintTop_toBottomOf="@+id/resedintaTF">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:background="@color/textLayoutBackground"
@@ -104,7 +164,7 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_weight="2"
             app:layout_constraintStart_toEndOf="@+id/ziNastereTF"
-            app:layout_constraintTop_toBottomOf="@+id/numPrenumeTF">
+            app:layout_constraintTop_toBottomOf="@+id/resedintaTF">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:background="@color/textLayoutBackground"
@@ -132,7 +192,7 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_weight="2.5"
             app:layout_constraintStart_toEndOf="@+id/lunaNastereTF"
-            app:layout_constraintTop_toBottomOf="@+id/numPrenumeTF">
+            app:layout_constraintTop_toBottomOf="@+id/resedintaTF">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:background="@color/textLayoutBackground"
@@ -146,16 +206,16 @@
                 android:textAlignment="center" />
         </com.google.android.material.textfield.TextInputLayout>
 
-
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/adresaTF"
+            android:id="@+id/localitateaTF"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_regular_textfield"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="12dp"
             android:layout_marginEnd="@dimen/margin_regular_textfield"
-            android:hint="Adresa locuinței"
+            android:hint="în localitatea"
+            app:endIconMode="clear_text"
             android:textColorHint="@color/gray"
             app:boxBackgroundColor="#F3F5F6"
             app:hintTextColor="@color/gray"
@@ -170,44 +230,6 @@
                 android:imeOptions="flagNoExtractUi"
                 android:inputType="textShortMessage|textCapSentences" />
         </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/deplasareTF"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_regular_textfield"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="@dimen/margin_regular_textfield"
-            android:hint="Locul/Locurile deplasării:"
-            app:endIconMode="clear_text"
-            android:textColorHint="@color/gray"
-            app:boxBackgroundColor="#F3F5F6"
-            app:hintTextColor="@color/gray"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/adresaTF">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:background="@color/textLayoutBackground"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:imeOptions="flagNoExtractUi"
-                android:inputType="textShortMessage|textCapSentences" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
-            android:id="@+id/titluTV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:fontFamily="@font/ds"
-            android:text="Declarație pe proprie răspundere"
-            android:textColor="@color/black"
-            android:textSize="30sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.button.MaterialButton
             style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
@@ -239,7 +261,7 @@
             app:hintTextColor="@color/gray"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/deplasareTF">
+            app:layout_constraintTop_toBottomOf="@id/localitateaTF">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:background="@color/textLayoutBackground"
