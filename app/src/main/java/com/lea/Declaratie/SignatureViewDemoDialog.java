@@ -1,5 +1,6 @@
 package com.lea.Declaratie;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
@@ -26,7 +27,11 @@ public class SignatureViewDemoDialog extends DialogFragment {
     public AlertDialog onCreateDialog(Bundle savedInstanceState) {
 
         Context context = getActivity();
-        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                int orientation = getActivity().getResources().getConfiguration().orientation;
+                if(orientation!= ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+                    getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                }
+
         signatureView = new SignatureView(context, null);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
