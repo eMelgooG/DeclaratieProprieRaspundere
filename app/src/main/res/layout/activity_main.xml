@@ -231,6 +231,110 @@
                 android:inputType="textShortMessage|textCapSentences" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/companieTF"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_regular_textfield"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="@dimen/margin_regular_textfield"
+            android:hint="instituția/societatea/organizația"
+            android:visibility="invisible"
+            app:endIconMode="clear_text"
+            android:textColorHint="@color/gray"
+            app:boxBackgroundColor="#F3F5F6"
+            app:hintTextColor="@color/gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/localitateaTF">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:background="@color/textLayoutBackground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="flagNoExtractUi"
+                android:inputType="textShortMessage|textCapSentences" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/sediulTF"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_regular_textfield"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="@dimen/margin_regular_textfield"
+            android:hint="cu sediul în: "
+            android:visibility="invisible"
+            app:endIconMode="clear_text"
+            android:textColorHint="@color/gray"
+            app:boxBackgroundColor="#F3F5F6"
+            app:hintTextColor="@color/gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/companieTF">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:background="@color/textLayoutBackground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="flagNoExtractUi"
+                android:inputType="textShortMessage|textCapSentences" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/adresa1TF"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_regular_textfield"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="@dimen/margin_regular_textfield"
+            android:hint="adresa 1:"
+            android:visibility="invisible"
+            app:endIconMode="clear_text"
+            android:textColorHint="@color/gray"
+            app:boxBackgroundColor="#F3F5F6"
+            app:hintTextColor="@color/gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sediulTF">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:background="@color/textLayoutBackground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="flagNoExtractUi"
+                android:inputType="textShortMessage|textCapSentences" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/adresa2TF"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_regular_textfield"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="@dimen/margin_regular_textfield"
+            android:hint="adresa 2:"
+            android:visibility="invisible"
+            app:endIconMode="clear_text"
+            android:textColorHint="@color/gray"
+            app:boxBackgroundColor="#F3F5F6"
+            app:hintTextColor="@color/gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/adresa1TF">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:background="@color/textLayoutBackground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="flagNoExtractUi"
+                android:inputType="textShortMessage|textCapSentences" />
+        </com.google.android.material.textfield.TextInputLayout>
+
         <com.google.android.material.button.MaterialButton
             style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
             android:background="@color/textLayoutBackground"

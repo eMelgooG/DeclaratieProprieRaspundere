@@ -24,7 +24,7 @@ public class Helper {
 
     //Constants
      static final String TITLU_PDF = "DECLARAȚIE PE PROPRIE RĂSPUNDERE",
-            DATA_NASTERII_PDF = "născut/ă în data de:                                       în localitatea ",
+            DATA_NASTERII_PDF = "născut/ă în data de:                                       în localitatea  ",
             NUME_PDF = "Subsemnatul/a: ",
             DOMICILIU_PDF = "domiciliat/ă în:  ",
             RESEDINTA_PDF = "cu reședința în fapt în:  ",
@@ -38,12 +38,12 @@ public class Helper {
             DATA_PDF = "Data",
             SEMNATURA_PDF = "Semnătura",
            positiveCheckbox = "(X) ",
-            negativeCheckbox = "( ) ";
+            negativeCheckbox = "(  ) ";
 
 
 
 
-    static boolean generatePdf(String name, String birthDate, String address, String placesToGo, String date, String motive, String semnaturaUriString, Context context) {
+    static boolean generatePdf(String name, String birthDate, String domiciliu, String resedinta, String localitate, String date, String motive, String semnaturaUriString, Context context) {
         PdfDocument myPdfDocument = new PdfDocument();
         PdfDocument.PageInfo myPageInfo = new PdfDocument.PageInfo.Builder(595, 842, 1).create();
         PdfDocument.Page myPage = myPdfDocument.startPage(myPageInfo);
@@ -52,7 +52,7 @@ public class Helper {
         Paint titluPaint = new Paint();
         titluPaint.setTypeface(Typeface.SANS_SERIF);
         titluPaint.setFakeBoldText(true);
-        titluPaint.setTextSize(18f);
+        titluPaint.setTextSize(16f);
         titluPaint.setTextAlign(Paint.Align.CENTER);
 
         //text normal
@@ -76,9 +76,19 @@ public class Helper {
 
 
         Canvas canvas = myPage.getCanvas();
-        float y = 85;
+        float y = 95;
         float x = 54;
         float z = x+ textNormalPaint.measureText(RESEDINTA_PDF);
+
+        //draw image
+        Bitmap bim = BitmapFactory.decodeResource(context.getResources(), R.raw.precaut);
+        Paint mbPaint = new Paint(Paint.FILTER_BITMAP_FLAG);
+        mbPaint.setFilterBitmap(true);
+        bim.setDensity(bim.getDensity() * 8);
+        bim.setHasMipMap(true);
+        canvas.drawBitmap(bim,myPageInfo.getPageWidth()/1.45f,y/7.5f,mbPaint);
+
+        y+=10;
         //draw title
         canvas.drawText(TITLU_PDF, myPageInfo.getPageWidth() / 2, y, titluPaint);
         y = breakLine(y, titluPaint, 2.2f);
@@ -89,13 +99,16 @@ public class Helper {
         y = breakLine(y, textNormalPaint, 1.8f);
 
         canvas.drawText(DOMICILIU_PDF, x, y, textNormalPaint);
+        canvas.drawText(domiciliu, z, y, textNormalPaint);
         y = breakLine(y, textNormalPaint, 1.8f);
 
         canvas.drawText(RESEDINTA_PDF, x, y, textNormalPaint);
+        canvas.drawText(resedinta, z, y, textNormalPaint);
         y = breakLine(y, textNormalPaint, 1.8f);
 
         canvas.drawText(DATA_NASTERII_PDF, x, y, textNormalPaint);
         canvas.drawText(birthDate, z, y, textNormalPaint);
+        canvas.drawText(localitate, x + textNormalPaint.measureText(DATA_NASTERII_PDF), y, textNormalPaint);
         y = breakLine(y, textNormalPaint, 3f);
 
         StaticLayout mTextLayout;
@@ -120,7 +133,7 @@ public class Helper {
 
 //        Helper pentru motive
         canvas.save();
-       TextPaint mTextPaint = new TextPaint(helperTextPaint);
+       TextPaint mTextPaint;
         TextPaint mTextNormalPaint = new TextPaint(textNormalPaint);
        mTextLayout = new StaticLayout(MOTIVE_HELPER_PDF, mTextNormalPaint, canvas.getWidth() - 120, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
         canvas.translate(x, y);

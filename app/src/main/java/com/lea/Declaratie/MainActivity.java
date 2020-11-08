@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
                                                     return;
                                                 }
                                                 // try to create the pdf
-                                                if (Helper.generatePdf(nume, dataNasterii, domiciliu, resedinta, data, motive, semnaturaUriString, MainActivity.this)) {
+                                                if (Helper.generatePdf(nume, dataNasterii, domiciliu, resedinta, localitate, data, motive, semnaturaUriString, MainActivity.this)) {
 
                                                     //Open pdf
                                                     try {
