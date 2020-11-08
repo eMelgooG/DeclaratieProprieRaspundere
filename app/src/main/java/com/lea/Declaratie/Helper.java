@@ -45,7 +45,7 @@ public class Helper {
 
 
 
-    static boolean generatePdf(String name, String birthDate, String address, String placesToGo, String date, String motive, Context context) {
+    static boolean generatePdf(String name, String birthDate, String address, String placesToGo, String date, String motive, String semnaturaUriString, Context context) {
         PdfDocument myPdfDocument = new PdfDocument();
         PdfDocument.PageInfo myPageInfo = new PdfDocument.PageInfo.Builder(595, 842, 1).create();
         PdfDocument.Page myPage = myPdfDocument.startPage(myPageInfo);
@@ -203,10 +203,10 @@ public class Helper {
         canvas.drawText(SEMNATURA_PDF, x, y, textNormalPaint);
         Paint mPaint = new Paint(Paint.FILTER_BITMAP_FLAG);
         mPaint.setFilterBitmap(true);
-        if (MainActivity.semnaturaUriString != null) {
+        if (semnaturaUriString != null) {
             Bitmap bm = null;
             try {
-                InputStream is = context.getContentResolver().openInputStream(Uri.parse(MainActivity.semnaturaUriString));
+                InputStream is = context.getContentResolver().openInputStream(Uri.parse(semnaturaUriString));
                 bm = BitmapFactory.decodeStream(is);
                 is.close();
             } catch (FileNotFoundException e) {

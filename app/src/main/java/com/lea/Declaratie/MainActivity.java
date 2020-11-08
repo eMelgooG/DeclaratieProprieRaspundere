@@ -32,11 +32,8 @@ import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
-
-
-
     //Views
-    TextInputLayout numeTextInput, ziuaNasteriiTextInput, lunaNasteriiTextInput, anulNasteriiTextInput, domiciliuTextInput, resedintaTextInput, dataTF;
+    TextInputLayout numeTextInput, ziuaNasteriiTextInput, lunaNasteriiTextInput, anulNasteriiTextInput, domiciliuTextInput, resedintaTextInput, localitateaTextInput, dataTF;
     MaterialButton motiveDeplasareButon, generarePdfButon, semnaturaButon;
     ImageView semnaturaImageView;
     ImageButton imageButtonRemove;
@@ -48,8 +45,7 @@ public class MainActivity extends AppCompatActivity {
     SimpleDateFormat dataFormat = new SimpleDateFormat("dd/MM/yyyy"); //default: data de azi
     Calendar c = Calendar.getInstance();
     SharedPreferences sharedPreferences;
-    static String semnaturaUriString = null;
-    private String resedinta = null;
+     String semnaturaUriString = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         sharedPreferences = this.getSharedPreferences("com.lea.Declaratie", Context.MODE_PRIVATE);
 
         //Initialize text inputs
+        localitateaTextInput = findViewById(R.id.localitateaTF);
         numeTextInput = findViewById(R.id.subsemnatulTF);
         ziuaNasteriiTextInput = findViewById(R.id.ziNastereTF);
         lunaNasteriiTextInput = findViewById(R.id.lunaNastereTF);
@@ -80,64 +77,51 @@ public class MainActivity extends AppCompatActivity {
 
         //Reinitialize the state if configuration change occurs
         if (savedInstanceState != null) {
-            numeTextInput.getEditText().setText(savedInstanceState.getString("nume"));
-            ziuaNasteriiTextInput.getEditText().setText(savedInstanceState.getString("zi"));
-            lunaNasteriiTextInput.getEditText().setText(savedInstanceState.getString("luna"));
-            anulNasteriiTextInput.getEditText().setText(savedInstanceState.getString("an"));
-            domiciliuTextInput.getEditText().setText(savedInstanceState.getString("domiciliu"));
-            resedintaTextInput.getEditText().setText(savedInstanceState.getString("resedinta"));
             checkedItems = savedInstanceState.getBooleanArray("motive");
             dataTF.getEditText().setText(savedInstanceState.getString("data"));
-            semnaturaUriString = savedInstanceState.getString("semnatura");
-        } else {
-            //Otherwise update everything
+        }  else {
             checkedItems = new boolean[listaMotive.length];
+        }
             //Initializare data de azi
             dataTF.getEditText().setText(dataFormat.format(c.getTime()));
-            numeTextInput.getEditText().setText(sharedPreferences.getString("nume", null));
-            ziuaNasteriiTextInput.getEditText().setText(sharedPreferences.getString("zi", null));
-            lunaNasteriiTextInput.getEditText().setText(sharedPreferences.getString("luna", null));
-            anulNasteriiTextInput.getEditText().setText(sharedPreferences.getString("an", null));
-            domiciliuTextInput.getEditText().setText(sharedPreferences.getString("domiciliu", null));
+            localitateaTextInput.getEditText().setText(sharedPreferences.getString("localitate",""));
+            numeTextInput.getEditText().setText(sharedPreferences.getString("nume", ""));
+            ziuaNasteriiTextInput.getEditText().setText(sharedPreferences.getString("zi", ""));
+            lunaNasteriiTextInput.getEditText().setText(sharedPreferences.getString("luna", ""));
+            anulNasteriiTextInput.getEditText().setText(sharedPreferences.getString("an", ""));
+            domiciliuTextInput.getEditText().setText(sharedPreferences.getString("domiciliu", ""));
+            resedintaTextInput.getEditText().setText(sharedPreferences.getString("resedinta",""));
             semnaturaUriString = sharedPreferences.getString("semnatura", null);
-            resedintaTextInput.getEditText().setText(resedinta = sharedPreferences.getString("resedinta",null););
-        }
 
         if (semnaturaUriString != null) {
             Uri uri = Uri.parse(semnaturaUriString);
             updateImageView(uri);
         }
-
         //Listeners
                         generarePdfButon.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-
                                 //Get the user input
-                                String nume = numeTextInput.getEditText().getText().toString();
-                                String dataNasterii = "";
-                                String zi = ziuaNasteriiTextInput.getEditText().getText().toString();
-                                String luna = lunaNasteriiTextInput.getEditText().getText().toString();
-                                String anul = anulNasteriiTextInput.getEditText().getText().toString();
+                                String nume = numeTextInput.getEditText().getText().toString(),
+                                 zi = ziuaNasteriiTextInput.getEditText().getText().toString(),
+                                 luna = lunaNasteriiTextInput.getEditText().getText().toString(),
+                                 anul = anulNasteriiTextInput.getEditText().getText().toString(),
+                                 domiciliu = domiciliuTextInput.getEditText().getText().toString(),
+                                 resedinta = resedintaTextInput.getEditText().getText().toString(),
+                                 localitate = localitateaTextInput.getEditText().getText().toString(),
+                                 data = dataTF.getEditText().getText().toString(),
+                                 dataNasterii = "";
 
-                                SharedPreferences.Editor sharedPreferencesEdit = sharedPreferences.edit();
+
+
                                 // check to see if all the text fields are filled
                                 if (zi.length() > 0 && luna.length() > 0 && anul.length() > 0) {
-                                    sharedPreferencesEdit.putString("zi", zi);
-                                    sharedPreferencesEdit.putString("luna", luna);
-                                    sharedPreferencesEdit.putString("an", anul);
                                     dataNasterii = zi + "/" +
                                             luna + "/" + anul;
-                                    String domiciliu = domiciliuTextInput.getEditText().getText().toString();
-                                     resedinta = resedintaTextInput.getEditText().getText().toString();
-                                    String data = dataTF.getEditText().getText().toString();
+
 
                                     if (nume.length() > 0 && domiciliu.length() > 0) {
-                                        sharedPreferencesEdit.putString("nume", nume);
-                                        sharedPreferencesEdit.putString("domiciliu", domiciliu);
-                                        sharedPreferencesEdit.apply();
 
-                                        if (resedinta.length() > 0) {
 
                                             // check to see if there are any reasons selected and also retrieve the Motivele in String format to write to to the PDF
                                             String motive = getMotive();
@@ -154,8 +138,8 @@ public class MainActivity extends AppCompatActivity {
                                                     return;
                                                 }
                                                 // try to create the pdf
-                                                if (Helper.generatePdf(nume, dataNasterii, domiciliu, resedinta, data, motive,MainActivity.this)) {
-                                                    sharedPreferencesEdit.putString("resedinta",resedinta).apply();
+                                                if (Helper.generatePdf(nume, dataNasterii, domiciliu, resedinta, data, motive, semnaturaUriString, MainActivity.this)) {
+
                                                     //Open pdf
                                                     try {
                                                         Intent pdfOpenintent = new Intent(Intent.ACTION_VIEW);
@@ -185,10 +169,6 @@ public class MainActivity extends AppCompatActivity {
                                                 //to be done show warning sign
                                                 motiveDeplasareButon.setIconTintResource(R.color.red);
                                             }
-
-                                        } else {
-                                            Toast.makeText(getApplicationContext(), "Completează toate câmpurile!", Toast.LENGTH_SHORT).show();
-                                        }
 
                                     } else {
                                         Toast.makeText(getApplicationContext(), "Completează toate câmpurile!", Toast.LENGTH_SHORT).show();
@@ -426,6 +406,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        sharedPreferences.edit().putString("semnatura", semnaturaUriString).apply();
+        SharedPreferences.Editor sharedPreferencesEdit = sharedPreferences.edit();
+        sharedPreferencesEdit.putString("semnatura", semnaturaUriString);
+        sharedPreferencesEdit.putString("nume", numeTextInput.getEditText().getText().toString());
+        sharedPreferencesEdit.putString("domiciliu", domiciliuTextInput.getEditText().getText().toString());
+        sharedPreferencesEdit.putString("resedinta",resedintaTextInput.getEditText().getText().toString());
+        sharedPreferencesEdit.putString("localitate",localitateaTextInput.getEditText().getText().toString());
+        sharedPreferencesEdit.putString("zi", ziuaNasteriiTextInput.getEditText().getText().toString());
+        sharedPreferencesEdit.putString("luna", lunaNasteriiTextInput.getEditText().getText().toString());
+        sharedPreferencesEdit.putString("an", anulNasteriiTextInput.getEditText().getText().toString());
+        sharedPreferencesEdit.apply();
     }
 }
