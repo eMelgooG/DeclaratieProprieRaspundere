@@ -24,19 +24,24 @@ public class Helper {
 
     //Constants
      static final String TITLU_PDF = "DECLARAȚIE PE PROPRIE RĂSPUNDERE",
-            DATA_NASTERII_PDF = "Data nașterii: ",
-            NUME_PDF = "Nume, prenume: ",
-            ADRESA_PDF = "Adresa locuinței: ",
-            ADRESA_HELPER_PDF = "Se va completa adresa locuinței în care persoana locuiește în fapt, indiferent dacă este indentică sau nu cu cea menționată în actul de identitate.",
-            LOCUL_HELPER_PDF = "Se vor menționa locurile în care persoana se deplasează, în ordinea în care aceasta intenționează să-și desfășoare traseul.",
-            MOTIVE_HELPER_PDF = "Se va bifa doar motivul/motivele deplasării dintre cele prevăzute în listă, nefiind permise deplasări realizate invoând alte motive decât cele prevăzute în Ordonanța Militară nr. 3/2020..",
-            HELPER_FINAL_PDF = "Persoanele care au împlinit vârsta de 65 de ani completează doar pentru motivele prevăzute în cămpurile 1-6, deplasarea fiind permisă zilnic doar în intervalul orar 11.00 - 13.00.",
+            DATA_NASTERII_PDF = "născut/ă în data de:                             în localitatea ",
+            NUME_PDF = "Subsemnatul/a: ",
+            DOMICILIU_PDF = "domiciliat/ă în:  ",
+            RESEDINTA_PDF = "cu reședința în fapt în:  ",
+            MOTIVE_HELPER_PDF = "declar pe proprie răspundere, cunoscând prevederile articolului 326 din Codul Penal privind falsul în declarații, că mă deplasez în afara locuinței, " +
+                    "în intervalul orar 23.00 – 05.00, din următorul/" +
+                    " următoarele motive:",
+            HELPER_FINAL_PDF = "*Declarația pe propria răspundere poate fi scrisă de mână, cu condiția preluării tuturor elementelor prezentate mai sus." +
+                    "**Declarația pe propria răspundere poate fi stocată și prezentată pentru control pe dispozitive electronice mobile, cu" +
+                    "condiția ca pe documentul prezentat să existe semnătura olografă a persoanei care folosește Declarația și data pentru care" +
+                    "este valabilă declarația.",
             LOCUL_DEPLASARII_PDF = "Locul/locurile deplasării: ",
             MOTIVUL_PDF = "Motivul/motivele deplasării: ",
             DATA_PDF = "Data",
             SEMNATURA_PDF = "Semnătura",
-            positiveCheckbox = "(x) ",
-            negativeCheckbox = "( ) ";
+           positiveCheckbox = "(X)",
+            negativeCheckbox = "()";
+
 
 
 
@@ -73,74 +78,89 @@ public class Helper {
 
 
         Canvas canvas = myPage.getCanvas();
-        float y = 60;
-        float x = 40;
-
+        float y = 85;
+        float x = 60;
+        float z = x+ textNormalPaint.measureText(RESEDINTA_PDF);
         //draw title
         canvas.drawText(TITLU_PDF, myPageInfo.getPageWidth() / 2, y, titluPaint);
-        y = breakLine(y, titluPaint, 2f);
+        y = breakLine(y, titluPaint, 1.7f);
 
         //draw name, birth date, address
         canvas.drawText(NUME_PDF, x, y, textBoldPaint);
-        canvas.drawText(name, x + textNormalPaint.measureText(NUME_PDF), y, textNormalPaint);
-        y = breakLine(y, textNormalPaint, 1.1f);
+        canvas.drawText(name, z, y, textNormalPaint);
+        y = breakLine(y, textNormalPaint, 1.5f);
 
-        canvas.drawText(DATA_NASTERII_PDF, x, y, textBoldPaint);
-        canvas.drawText(birthDate, x + textNormalPaint.measureText(DATA_NASTERII_PDF), y, textNormalPaint);
-        y = breakLine(y, textNormalPaint, 1.1f);
+        canvas.drawText(DOMICILIU_PDF, x, y, textNormalPaint);
+        y = breakLine(y, textNormalPaint, 1.5f);
 
-        canvas.drawText(ADRESA_PDF, x, y, textBoldPaint);
+        canvas.drawText(RESEDINTA_PDF, x, y, textNormalPaint);
+        y = breakLine(y, textNormalPaint, 1.5f);
 
-        float widthPdfTag = textNormalPaint.measureText(ADRESA_PDF);
-        float width = textNormalPaint.measureText(address);
-        float desiredWidth = canvas.getWidth() - 70 - widthPdfTag;
+        canvas.drawText(DATA_NASTERII_PDF, x, y, textNormalPaint);
+        canvas.drawText(birthDate, z, y, textNormalPaint);
+        y = breakLine(y, textNormalPaint, 3f);
+
+        StaticLayout mTextLayout;
+
+//        float widthPdfTag = textNormalPaint.measureText(DOMICILIU_PDF);
+
+//        float width = textNormalPaint.measureText(address);
+//        float desiredWidth = canvas.getWidth() - 70 - widthPdfTag;
         //check to see if the address is long
-        if (width < desiredWidth) {
-            canvas.drawText(address, x + widthPdfTag, y, textNormalPaint);
-        } else {
-            int[] indexes = separateOnTwoRows(address, desiredWidth, textNormalPaint);
+//        if (width < desiredWidth) {
+//            canvas.drawText(address, x + widthPdfTag, y, textNormalPaint);
+//        } else {
+//            int[] indexes = separateOnTwoRows(address, desiredWidth, textNormalPaint);
             //separate it on two rows
 
-            canvas.drawText(address.substring(0, indexes[0]), x + widthPdfTag, y, textNormalPaint);
-            y = breakLine(y, textNormalPaint, 0.9f);
-            canvas.drawText(address.substring(indexes[1]), x, y, textNormalPaint);
-        }
-        y = breakLine(y, helperTextPaint, 0.3f);
+//            canvas.drawText(address.substring(0, indexes[0]), x + widthPdfTag, y, textNormalPaint);
+//            y = breakLine(y, textNormalPaint, 0.9f);
+//            canvas.drawText(address.substring(indexes[1]), x, y, textNormalPaint);
+//        }
+//        y = breakLine(y, helperTextPaint, 0.3f);
 
 
-        //Helper pentru adresa
-        TextPaint mTextPaint = new TextPaint(helperTextPaint);
+//        Helper pentru motive
         canvas.save();
-        StaticLayout mTextLayout = new StaticLayout(ADRESA_HELPER_PDF, mTextPaint, canvas.getWidth() - 70, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+       TextPaint mTextPaint = new TextPaint(helperTextPaint);
+        TextPaint mTextNormalPaint = new TextPaint(textMotivePaint);
+       mTextLayout = new StaticLayout(MOTIVE_HELPER_PDF, mTextNormalPaint, canvas.getWidth() - 120, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
         canvas.translate(x, y);
         mTextLayout.draw(canvas);
         canvas.restore();
+
+               //Helper pentru adresa
+//        canvas.save();
+//      mTextLayout = new StaticLayout(ADRESA_HELPER_PDF, mTextPaint, canvas.getWidth() - 70, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+//        canvas.translate(x, y);
+//        mTextLayout.draw(canvas);
+//        canvas.restore();
 
         y = y + mTextPaint.getTextSize() * 2 + 1f;
         y = breakLine(y, helperTextPaint, 2.2f);
 
-        canvas.drawText(LOCUL_DEPLASARII_PDF, x, y, textBoldPaint);
-        widthPdfTag = textNormalPaint.measureText(LOCUL_DEPLASARII_PDF);
-        width = textNormalPaint.measureText(placesToGo);
-        desiredWidth = canvas.getWidth() - 70 - widthPdfTag;
+//        canvas.drawText(LOCUL_DEPLASARII_PDF, x, y, textBoldPaint);
+//        widthPdfTag = textNormalPaint.measureText(LOCUL_DEPLASARII_PDF);
+//        width = textNormalPaint.measureText(placesToGo);
+//        desiredWidth = canvas.getWidth() - 70 - widthPdfTag;
 
-        if (width < desiredWidth) {
-            canvas.drawText(placesToGo, x + textBoldPaint.measureText(LOCUL_DEPLASARII_PDF), y, textNormalPaint);
-        } else {
-            int[] indexes = separateOnTwoRows(placesToGo, desiredWidth, textNormalPaint);
-            //separate it on two rows
-            canvas.drawText(placesToGo.substring(0, indexes[0]), x + widthPdfTag, y, textNormalPaint);
-            y = breakLine(y, textNormalPaint, 0.9f);
-            canvas.drawText(placesToGo.substring(indexes[1]), x, y, textNormalPaint);
-        }
-        y = breakLine(y, helperTextPaint, 0.3f);
+//        if (width < desiredWidth) {
+////            canvas.drawText(placesToGo, x + textBoldPaint.measureText(LOCUL_DEPLASARII_PDF), y, textNormalPaint);
+////        } else {
+////            int[] indexes = separateOnTwoRows(placesToGo, desiredWidth, textNormalPaint);
+////            //separate it on two rows
+////            canvas.drawText(placesToGo.substring(0, indexes[0]), x + widthPdfTag, y, textNormalPaint);
+////            y = breakLine(y, textNormalPaint, 0.9f);
+////            canvas.drawText(placesToGo.substring(indexes[1]), x, y, textNormalPaint);
+////        }
+//        y = breakLine(y, helperTextPaint, 0.3f);
 
         //Helper text locul deplasarii
-        mTextLayout = new StaticLayout(LOCUL_HELPER_PDF, mTextPaint, canvas.getWidth() - 70, Layout.Alignment.ALIGN_NORMAL, 1.1f, 0.5f, false);
-        canvas.save();
-        canvas.translate(x, y);
-        mTextLayout.draw(canvas);
-        canvas.restore();
+//        mTextLayout = new StaticLayout(LOCUL_HELPER_PDF, mTextPaint, canvas.getWidth() - 70, Layout.Alignment.ALIGN_NORMAL, 1.1f, 0.5f, false);
+//        canvas.save();
+//        canvas.translate(x, y);
+//        mTextLayout.draw(canvas);
+//        canvas.restore();
 
         y = y + mTextPaint.getTextSize() * 2 + 1f;
         y = breakLine(y, helperTextPaint, 2.2f);
