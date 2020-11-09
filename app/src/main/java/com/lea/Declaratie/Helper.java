@@ -62,7 +62,7 @@ public class Helper {
              cs.connect(R.id.dataTF,ConstraintSet.TOP,adr2.getId(),ConstraintSet.BOTTOM);
          } else {
              cs.connect(R.id.dataTF,ConstraintSet.TOP,R.id.localitateaTF,ConstraintSet.BOTTOM);
-             scrollView.scrollTo(0,0);
+             scrollView.smoothScrollTo(0,1500);
          }
          cs.applyTo(cl);
          comp.setVisibility(view);
