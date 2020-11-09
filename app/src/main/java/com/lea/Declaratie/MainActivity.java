@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
      String semnaturaUriString = null;
      boolean isExpanded = false;
+     byte motivDeplasareTint = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +97,21 @@ public class MainActivity extends AppCompatActivity {
             isExpanded = savedInstanceState.getBoolean("isExpanded");
             if(isExpanded) {
                 Helper.hideShowViews(companieTextInput,sediulTextInput,adresa1TextInput,adresa2TextInput,View.VISIBLE,(ConstraintLayout) findViewById(R.id.nestedConstraintLayout),(NestedScrollView) findViewById(R.id.nestedScrollView));
+            }
+            motivDeplasareTint = savedInstanceState.getByte("motivDeplasareTint");
+            switch (motivDeplasareTint) {
+                case(0): {
+                    motiveDeplasareButon.setIcon(getDrawable(R.drawable.ic_add_24dp));
+                    break;
+                }
+                case(1): {
+                    motiveDeplasareButon.setIconTintResource(R.color.buttonColor2);
+                    motiveDeplasareButon.setIcon(getDrawable(R.drawable.ic_check_black_24dp));
+                    break;
+                }
+                case(2): {
+                    motiveDeplasareButon.setIconTintResource(R.color.red);
+                }
             }
         }  else {
             checkedItems = new boolean[listaMotive.length];
@@ -201,6 +217,7 @@ public class MainActivity extends AppCompatActivity {
                                                 Toast.makeText(getApplicationContext(), "Alege cel puțin un motiv!", Toast.LENGTH_SHORT).show();
                                                 //to be done show warning sign
                                                 motiveDeplasareButon.setIconTintResource(R.color.red);
+                                                motivDeplasareTint = 2;
                                             }
 
                                     } else {
@@ -269,6 +286,7 @@ public class MainActivity extends AppCompatActivity {
                             if (checkedItems[i]) {
                                 motiveDeplasareButon.setIconTintResource(R.color.buttonColor2);
                                 motiveDeplasareButon.setIcon(getDrawable(R.drawable.ic_check_black_24dp));
+                                motivDeplasareTint = 1;
 
                                 //if we choose first option we unhide the views and change constraints
 
@@ -284,6 +302,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                         if (i == checkedItems.length) {
                             motiveDeplasareButon.setIcon(getDrawable(R.drawable.ic_add_24dp));
+                            motivDeplasareTint = 0;
                         }
                         if(isExpanded && checkedItems[0]==false) {
                             Helper.hideShowViews(companieTextInput,sediulTextInput,adresa1TextInput,adresa2TextInput,View.INVISIBLE, (ConstraintLayout) findViewById(R.id.nestedConstraintLayout),(NestedScrollView) findViewById(R.id.nestedScrollView));
@@ -420,6 +439,7 @@ public class MainActivity extends AppCompatActivity {
         outState.putBoolean("isExpanded",isExpanded);
         outState.putBooleanArray("motive", checkedItems);
         outState.putString("data", dataTF.getEditText().getText().toString());
+        outState.putByte("motivDeplasareTint",motivDeplasareTint);
 
     }
 
