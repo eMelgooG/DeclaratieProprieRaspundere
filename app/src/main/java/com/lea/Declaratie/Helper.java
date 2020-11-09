@@ -210,7 +210,7 @@ public class Helper {
 //        y = breakLine(y, helperTextPaint, 2.2f);
 
         //Scrie motivele
-        mTextPaint = new TextPaint(textMotivePaint);
+        mTextPaint = new TextPaint(textNormalPaint);
         mTextLayout = new StaticLayout(motive, mTextPaint, canvas.getWidth() - 100, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.5f, false);
         canvas.save();
         canvas.translate(x+16, y);
