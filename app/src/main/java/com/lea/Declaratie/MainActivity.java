@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.FileProvider;
+import androidx.core.widget.NestedScrollView;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -93,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
             dataTF.getEditText().setText(savedInstanceState.getString("data"));
             isExpanded = savedInstanceState.getBoolean("isExpanded");
             if(isExpanded) {
-                Helper.hideShowViews(companieTextInput,sediulTextInput,adresa1TextInput,adresa2TextInput,View.VISIBLE,(ConstraintLayout) findViewById(R.id.constraintLayout));
+                Helper.hideShowViews(companieTextInput,sediulTextInput,adresa1TextInput,adresa2TextInput,View.VISIBLE,(ConstraintLayout) findViewById(R.id.nestedConstraintLayout),(NestedScrollView) findViewById(R.id.nestedScrollView));
             }
         }  else {
             checkedItems = new boolean[listaMotive.length];
@@ -256,11 +257,11 @@ public class MainActivity extends AppCompatActivity {
                                 //if we choose first option we unhide the views and change constraints
 
                                 if(checkedItems[0]==true && !isExpanded) {
-                                    Helper.hideShowViews(companieTextInput,sediulTextInput,adresa1TextInput,adresa2TextInput,View.VISIBLE,(ConstraintLayout) findViewById(R.id.constraintLayout));
+                                    Helper.hideShowViews(companieTextInput,sediulTextInput,adresa1TextInput,adresa2TextInput,View.VISIBLE,(ConstraintLayout) findViewById(R.id.nestedConstraintLayout),(NestedScrollView) findViewById(R.id.nestedScrollView));
                                     isExpanded = true;
 
                                 } else if(isExpanded && checkedItems[0]==false) {
-                                    Helper.hideShowViews(companieTextInput,sediulTextInput,adresa1TextInput,adresa2TextInput,View.INVISIBLE, (ConstraintLayout) findViewById(R.id.constraintLayout));
+                                    Helper.hideShowViews(companieTextInput,sediulTextInput,adresa1TextInput,adresa2TextInput,View.INVISIBLE, (ConstraintLayout) findViewById(R.id.nestedConstraintLayout),(NestedScrollView)findViewById(R.id.nestedScrollView));
                                     isExpanded = false;
                                 }
                                 return;
@@ -269,7 +270,10 @@ public class MainActivity extends AppCompatActivity {
                             motiveDeplasareButon.setIcon(getDrawable(R.drawable.ic_add_24dp));
                         }
                         if(isExpanded && checkedItems[0]==false) {
-                            Helper.hideShowViews(companieTextInput,sediulTextInput,adresa1TextInput,adresa2TextInput,View.INVISIBLE, (ConstraintLayout) findViewById(R.id.constraintLayout));
+                            Helper.hideShowViews(companieTextInput,sediulTextInput,adresa1TextInput,adresa2TextInput,View.INVISIBLE, (ConstraintLayout) findViewById(R.id.nestedConstraintLayout),(NestedScrollView) findViewById(R.id.nestedScrollView));
+                            ConstraintLayout cl = findViewById(R.id.constraintLayout);
+                            NestedScrollView scrollView = findViewById(R.id.nestedScrollView);
+                            scrollView.scrollTo(0,0);
                             isExpanded = false;
                         }
                     }

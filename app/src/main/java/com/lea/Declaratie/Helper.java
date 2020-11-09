@@ -15,6 +15,7 @@ import android.view.View;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.widget.NestedScrollView;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -50,7 +51,7 @@ public class Helper {
 
 
 
-     static void hideShowViews(TextInputLayout comp, TextInputLayout sediul, TextInputLayout adr1, TextInputLayout adr2, int view,ConstraintLayout cl) {
+     static void hideShowViews(TextInputLayout comp, TextInputLayout sediul, TextInputLayout adr1, TextInputLayout adr2, int view,ConstraintLayout cl, NestedScrollView scrollView ) {
          ConstraintSet cs = new ConstraintSet();
          cs.clone(cl);
 
@@ -61,6 +62,7 @@ public class Helper {
              cs.connect(R.id.dataTF,ConstraintSet.TOP,adr2.getId(),ConstraintSet.BOTTOM);
          } else {
              cs.connect(R.id.dataTF,ConstraintSet.TOP,R.id.localitateaTF,ConstraintSet.BOTTOM);
+             scrollView.scrollTo(0,0);
          }
          cs.applyTo(cl);
          comp.setVisibility(view);
