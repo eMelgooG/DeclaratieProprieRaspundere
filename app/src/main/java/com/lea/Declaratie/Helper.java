@@ -11,6 +11,13 @@ import android.net.Uri;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import android.view.View;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -43,6 +50,24 @@ public class Helper {
 
 
 
+     static void hideShowViews(TextInputLayout comp, TextInputLayout sediul, TextInputLayout adr1, TextInputLayout adr2, int view,ConstraintLayout cl) {
+         ConstraintSet cs = new ConstraintSet();
+         cs.clone(cl);
+
+         if(view== View.VISIBLE) {
+             int idCompanie = comp.getId();
+             cs.connect(idCompanie,ConstraintSet.TOP,R.id.localitateaTF,ConstraintSet.BOTTOM);
+             cs.connect(idCompanie,ConstraintSet.LEFT,R.id.localitateaTF,ConstraintSet.LEFT);
+             cs.connect(R.id.dataTF,ConstraintSet.TOP,adr2.getId(),ConstraintSet.BOTTOM);
+         } else {
+             cs.connect(R.id.dataTF,ConstraintSet.TOP,R.id.localitateaTF,ConstraintSet.BOTTOM);
+         }
+         cs.applyTo(cl);
+         comp.setVisibility(view);
+         sediul.setVisibility(view);
+         adr1.setVisibility(view);
+         adr2.setVisibility(view);
+     }
     static boolean generatePdf(String name, String birthDate, String domiciliu, String resedinta, String localitate, String date, String motive, String semnaturaUriString, Context context) {
         PdfDocument myPdfDocument = new PdfDocument();
         PdfDocument.PageInfo myPageInfo = new PdfDocument.PageInfo.Builder(595, 842, 1).create();

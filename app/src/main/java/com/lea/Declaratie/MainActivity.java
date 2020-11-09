@@ -2,6 +2,8 @@ package com.lea.Declaratie;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.FileProvider;
 
 import android.app.AlertDialog;
@@ -21,6 +23,7 @@ import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
@@ -33,7 +36,8 @@ import java.util.Calendar;
 public class MainActivity extends AppCompatActivity {
 
     //Views
-    TextInputLayout numeTextInput, ziuaNasteriiTextInput, lunaNasteriiTextInput, anulNasteriiTextInput, domiciliuTextInput, resedintaTextInput, localitateaTextInput, dataTF;
+    TextInputLayout numeTextInput, ziuaNasteriiTextInput, lunaNasteriiTextInput, anulNasteriiTextInput, domiciliuTextInput, resedintaTextInput, localitateaTextInput, dataTF,
+            companieTextInput, sediulTextInput, adresa1TextInput, adresa2TextInput;
     MaterialButton motiveDeplasareButon, generarePdfButon, semnaturaButon;
     ImageView semnaturaImageView;
     ImageButton imageButtonRemove;
@@ -46,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     Calendar c = Calendar.getInstance();
     SharedPreferences sharedPreferences;
      String semnaturaUriString = null;
+     boolean isExpanded = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +67,14 @@ public class MainActivity extends AppCompatActivity {
         anulNasteriiTextInput = findViewById(R.id.anNastereTF);
         domiciliuTextInput = findViewById(R.id.domiciliuTF);
         resedintaTextInput = findViewById(R.id.resedintaTF);
+
+        companieTextInput = findViewById(R.id.companieTF);
+        sediulTextInput = findViewById(R.id.sediulTF);
+        adresa1TextInput = findViewById(R.id.adresa1TF);
+        adresa2TextInput = findViewById(R.id.adresa2TF);
+
         dataTF = findViewById(R.id.dataTF);
+
 
         //Initialize other views
         imageButtonRemove = findViewById(R.id.imageButtonRemove);
@@ -79,6 +91,10 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState != null) {
             checkedItems = savedInstanceState.getBooleanArray("motive");
             dataTF.getEditText().setText(savedInstanceState.getString("data"));
+            isExpanded = savedInstanceState.getBoolean("isExpanded");
+            if(isExpanded) {
+                Helper.hideShowViews(companieTextInput,sediulTextInput,adresa1TextInput,adresa2TextInput,View.VISIBLE,(ConstraintLayout) findViewById(R.id.constraintLayout));
+            }
         }  else {
             checkedItems = new boolean[listaMotive.length];
         }
@@ -236,10 +252,26 @@ public class MainActivity extends AppCompatActivity {
                             if (checkedItems[i]) {
                                 motiveDeplasareButon.setIconTintResource(R.color.buttonColor2);
                                 motiveDeplasareButon.setIcon(getDrawable(R.drawable.ic_check_black_24dp));
+
+                                //if we choose first option we unhide the views and change constraints
+
+                                if(checkedItems[0]==true && !isExpanded) {
+                                    Helper.hideShowViews(companieTextInput,sediulTextInput,adresa1TextInput,adresa2TextInput,View.VISIBLE,(ConstraintLayout) findViewById(R.id.constraintLayout));
+                                    isExpanded = true;
+
+                                } else if(isExpanded && checkedItems[0]==false) {
+                                    Helper.hideShowViews(companieTextInput,sediulTextInput,adresa1TextInput,adresa2TextInput,View.INVISIBLE, (ConstraintLayout) findViewById(R.id.constraintLayout));
+                                    isExpanded = false;
+                                }
                                 return;
                             }
-                        if (i == checkedItems.length)
+                        if (i == checkedItems.length) {
                             motiveDeplasareButon.setIcon(getDrawable(R.drawable.ic_add_24dp));
+                        }
+                        if(isExpanded && checkedItems[0]==false) {
+                            Helper.hideShowViews(companieTextInput,sediulTextInput,adresa1TextInput,adresa2TextInput,View.INVISIBLE, (ConstraintLayout) findViewById(R.id.constraintLayout));
+                            isExpanded = false;
+                        }
                     }
 
                 });
@@ -365,15 +397,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString("nume", numeTextInput.getEditText().getText().toString());
-        outState.putString("zi", ziuaNasteriiTextInput.getEditText().getText().toString());
-        outState.putString("luna", lunaNasteriiTextInput.getEditText().getText().toString());
-        outState.putString("an", anulNasteriiTextInput.getEditText().getText().toString());
-        outState.putString("domiciliu", domiciliuTextInput.getEditText().getText().toString());
-        outState.putString("resedinta", resedintaTextInput.getEditText().getText().toString());
+        outState.putBoolean("isExpanded",isExpanded);
         outState.putBooleanArray("motive", checkedItems);
         outState.putString("data", dataTF.getEditText().getText().toString());
-        outState.putString("semnatura", semnaturaUriString);
+
     }
 
 
