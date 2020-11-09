@@ -17,6 +17,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -109,6 +110,10 @@ public class MainActivity extends AppCompatActivity {
             domiciliuTextInput.getEditText().setText(sharedPreferences.getString("domiciliu", ""));
             resedintaTextInput.getEditText().setText(sharedPreferences.getString("resedinta",""));
             semnaturaUriString = sharedPreferences.getString("semnatura", null);
+            companieTextInput.getEditText().setText(sharedPreferences.getString("companie",""));
+            sediulTextInput.getEditText().setText(sharedPreferences.getString("sediul",""));
+            adresa1TextInput.getEditText().setText(sharedPreferences.getString("adresa1",""));
+            adresa2TextInput.getEditText().setText(sharedPreferences.getString("adresa2",""));
 
         if (semnaturaUriString != null) {
             Uri uri = Uri.parse(semnaturaUriString);
@@ -127,6 +132,10 @@ public class MainActivity extends AppCompatActivity {
                                  resedinta = resedintaTextInput.getEditText().getText().toString(),
                                  localitate = localitateaTextInput.getEditText().getText().toString(),
                                  data = dataTF.getEditText().getText().toString(),
+                                 companie = companieTextInput.getEditText().getText().toString(),
+                                 sediul = sediulTextInput.getEditText().getText().toString(),
+                                 adresa1 = adresa1TextInput.getEditText().getText().toString(),
+                                 adresa2 = adresa2TextInput.getEditText().getText().toString(),
                                  dataNasterii = "";
 
 
@@ -138,10 +147,16 @@ public class MainActivity extends AppCompatActivity {
 
 
                                     if (nume.length() > 0 && domiciliu.length() > 0) {
-
-
                                             // check to see if there are any reasons selected and also retrieve the Motivele in String format to write to to the PDF
-                                            String motive = getMotive();
+                                        if(isExpanded) {
+                                            if(!adresa2.isEmpty()) {
+                                                adresa1+="\n";
+                                            }
+                                            listMotivePdf[0] = String.format(Helper.sablonInteresProfesionalMotiv, companie, sediul, adresa1, adresa2);
+                                        } else {
+                                            listMotivePdf[0] = String.format(Helper.sablonInteresProfesionalMotiv, "", "", "", "");
+                                        }
+                                                String motive = getMotive();
                                             if (motive.length() > 0) {
                                                 if (anul.length() < 4) {
                                                     anulNasteriiTextInput.setError("Invalid");
@@ -154,6 +169,7 @@ public class MainActivity extends AppCompatActivity {
                                                     dataTF.requestFocus();
                                                     return;
                                                 }
+
                                                 // try to create the pdf
                                                 if (Helper.generatePdf(nume, dataNasterii, domiciliu, resedinta, localitate, data, motive, semnaturaUriString, MainActivity.this)) {
 
@@ -382,7 +398,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    private String getMotive() {
+    private  String getMotive() {
         StringBuilder motive = new StringBuilder("");
         boolean x = false;
         for (int i = 0; i < checkedItems.length; i++) {
@@ -392,7 +408,7 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 motive.append(Helper.negativeCheckbox + listMotivePdf[i] + '\n');
             }
-            motive.append("\n");
+            motive.append('\n');
         }
         if (x) return motive.toString();
         else return "";
@@ -446,6 +462,10 @@ public class MainActivity extends AppCompatActivity {
         sharedPreferencesEdit.putString("zi", ziuaNasteriiTextInput.getEditText().getText().toString());
         sharedPreferencesEdit.putString("luna", lunaNasteriiTextInput.getEditText().getText().toString());
         sharedPreferencesEdit.putString("an", anulNasteriiTextInput.getEditText().getText().toString());
+        sharedPreferencesEdit.putString("companie",companieTextInput.getEditText().getText().toString());
+        sharedPreferencesEdit.putString("sediul",sediulTextInput.getEditText().getText().toString());
+        sharedPreferencesEdit.putString("adresa1",adresa1TextInput.getEditText().getText().toString());
+        sharedPreferencesEdit.putString("adresa2",adresa2TextInput.getEditText().getText().toString());
         sharedPreferencesEdit.apply();
     }
 }

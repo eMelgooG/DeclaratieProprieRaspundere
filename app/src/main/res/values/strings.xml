@@ -8,10 +8,7 @@
         <item>\nDeces al unui membru al familiei\n</item>
     </string-array>
     <string-array name="motivele_deplasarii_pdf">
-        <item>În interes profesional. Menționez că îmi desfășor activitatea profesională la\n
-instituția/societatea/organizația\n
-cu sediul în\n
-și cu punct/e de lucru la următoarele adrese: </item>
+        <item></item>
         <item>Asistență medicală care nu poate fi amânată și nici realizată de la distanță</item>
         <item>Achiziționarea de medicamente</item>
         <item>Îngrijirea/însoțirea copilului și/sau asistența persoanelor vârstnice, bolnave sau cu dizabilități</item>

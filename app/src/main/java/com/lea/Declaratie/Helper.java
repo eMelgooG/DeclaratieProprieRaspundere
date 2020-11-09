@@ -46,7 +46,13 @@ public class Helper {
             DATA_PDF = "Data",
             SEMNATURA_PDF = "Semnătura",
            positiveCheckbox = "(X) ",
-            negativeCheckbox = "(  ) ";
+            negativeCheckbox = "(  ) ",
+    sablonInteresProfesionalMotiv = "În interes profesional. Menționez că îmi desfășor activitatea profesională la\n" +
+            "instituția/societatea/organizația %s\n" +
+            "cu sediul în %s\n" +
+            "și cu punct/e de lucru la următoarele adrese:\n" +
+            "%s" +
+            "%s";
 
 
 
