@@ -68,7 +68,7 @@
         android:layout_marginStart="@dimen/margin_regular_textfield"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="@dimen/margin_regular_textfield"
-        android:hint="* domiciliat/ă în (adresă):"
+        android:hint="* domiciliat/ă în (adresă din CI):"
         app:endIconMode="clear_text"
         android:textColorHint="@color/gray"
         app:boxBackgroundColor="#F3F5F6"
