@@ -4,14 +4,18 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.WindowManager;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
@@ -27,11 +31,10 @@ import java.io.IOException;
 import java.io.InputStream;
 
 
-
 public class Helper {
 
     //Constants
-     static final String TITLU_PDF = "DECLARAȚIE PE PROPRIE RĂSPUNDERE",
+    static final String TITLU_PDF = "DECLARAȚIE PE PROPRIE RĂSPUNDERE",
             DATA_NASTERII_PDF = "născut/ă în data de:                                       în localitatea  ",
             NUME_PDF = "Subsemnatul/a: ",
             DOMICILIU_PDF = "domiciliat/ă în:  ",
@@ -45,37 +48,37 @@ public class Helper {
                     "este valabilă declarația.",
             DATA_PDF = "Data",
             SEMNATURA_PDF = "Semnătura",
-           positiveCheckbox = "(X) ",
+            positiveCheckbox = "(X) ",
             negativeCheckbox = "(  ) ",
-    sablonInteresProfesionalMotiv = "În interes profesional. Menționez că îmi desfășor activitatea profesională la\n" +
-            "instituția/societatea/organizația %s\n" +
-            "cu sediul în %s\n" +
-            "și cu punct/e de lucru la următoarele adrese:\n" +
-            "%s" +
-            "%s";
+            sablonInteresProfesionalMotiv = "În interes profesional. Menționez că îmi desfășor activitatea profesională la\n" +
+                    "instituția/societatea/organizația %s\n" +
+                    "cu sediul în %s\n" +
+                    "și cu punct/e de lucru la următoarele adrese:\n" +
+                    "%s" +
+                    "%s";
 
 
+    static void hideShowViews(TextInputLayout comp, TextInputLayout sediul, TextInputLayout adr1, TextInputLayout adr2, int view, ConstraintLayout cl, NestedScrollView scrollView) {
+        ConstraintSet cs = new ConstraintSet();
+        cs.clone(cl);
+
+        if (view == View.VISIBLE) {
+            int idCompanie = comp.getId();
+            cs.connect(idCompanie, ConstraintSet.TOP, R.id.localitateaTF, ConstraintSet.BOTTOM);
+            cs.connect(idCompanie, ConstraintSet.LEFT, R.id.localitateaTF, ConstraintSet.LEFT);
+            cs.connect(R.id.dataTF, ConstraintSet.TOP, adr2.getId(), ConstraintSet.BOTTOM);
+        } else {
+            cs.connect(R.id.dataTF, ConstraintSet.TOP, R.id.localitateaTF, ConstraintSet.BOTTOM);
+            scrollView.smoothScrollTo(0, 1500);
+        }
+        cs.applyTo(cl);
+        comp.setVisibility(view);
+        sediul.setVisibility(view);
+        adr1.setVisibility(view);
+        adr2.setVisibility(view);
+    }
 
 
-     static void hideShowViews(TextInputLayout comp, TextInputLayout sediul, TextInputLayout adr1, TextInputLayout adr2, int view,ConstraintLayout cl, NestedScrollView scrollView ) {
-         ConstraintSet cs = new ConstraintSet();
-         cs.clone(cl);
-
-         if(view== View.VISIBLE) {
-             int idCompanie = comp.getId();
-             cs.connect(idCompanie,ConstraintSet.TOP,R.id.localitateaTF,ConstraintSet.BOTTOM);
-             cs.connect(idCompanie,ConstraintSet.LEFT,R.id.localitateaTF,ConstraintSet.LEFT);
-             cs.connect(R.id.dataTF,ConstraintSet.TOP,adr2.getId(),ConstraintSet.BOTTOM);
-         } else {
-             cs.connect(R.id.dataTF,ConstraintSet.TOP,R.id.localitateaTF,ConstraintSet.BOTTOM);
-             scrollView.smoothScrollTo(0,1500);
-         }
-         cs.applyTo(cl);
-         comp.setVisibility(view);
-         sediul.setVisibility(view);
-         adr1.setVisibility(view);
-         adr2.setVisibility(view);
-     }
     static boolean generatePdf(String name, String birthDate, String domiciliu, String resedinta, String localitate, String date, String motive, String semnaturaUriString, Context context) {
         PdfDocument myPdfDocument = new PdfDocument();
         PdfDocument.PageInfo myPageInfo = new PdfDocument.PageInfo.Builder(595, 842, 1).create();
@@ -90,9 +93,11 @@ public class Helper {
 
         //text normal
         Paint textNormalPaint = new Paint();
-        TextPaint mTextNormalPaint = new TextPaint(textNormalPaint);
-        textNormalPaint.setTypeface(Typeface.SANS_SERIF);
         textNormalPaint.setTextSize(13.5f);
+
+        TextPaint mTextNormalPaint = new TextPaint(textNormalPaint);
+        textNormalPaint.setTypeface(Typeface.DEFAULT);
+
 
         //text bold
         Paint textBoldPaint = new Paint();
@@ -113,17 +118,14 @@ public class Helper {
         Canvas canvas = myPage.getCanvas();
         float y = 95;
         float x = 54;
-        float z = x+ textNormalPaint.measureText(RESEDINTA_PDF);
+        float z = x + textNormalPaint.measureText(RESEDINTA_PDF);
 
         //draw image stamp
         Bitmap bim = BitmapFactory.decodeResource(context.getResources(), R.raw.precaut);
-        Paint mbPaint = new Paint(Paint.FILTER_BITMAP_FLAG);
-        mbPaint.setFilterBitmap(true);
-        bim.setDensity(bim.getDensity() * 8);
         bim.setHasMipMap(true);
-        canvas.drawBitmap(bim,myPageInfo.getPageWidth()/1.45f,y/7.5f,mbPaint);
+        canvas.drawBitmap(bim, null, new RectF(myPageInfo.getPageWidth()/1.6f, y/7.5f, myPageInfo.getPageWidth()/1.6f+160, y/7.5f+70), null);
 
-        y+=10;
+        y += 10;
         //draw title
         canvas.drawText(TITLU_PDF, myPageInfo.getPageWidth() / 2, y, titluPaint);
         y = breakLine(y, titluPaint, 2.2f);
@@ -136,22 +138,22 @@ public class Helper {
         canvas.drawText(DOMICILIU_PDF, x, y, textNormalPaint);
 //        canvas.drawText(domiciliu, z, y, textNormalPaint);
 
-         float width = textNormalPaint.measureText(domiciliu);
-        float desiredWidth = canvas.getWidth() -z - 50;
+        float width = textNormalPaint.measureText(domiciliu);
+        float desiredWidth = canvas.getWidth() - z - 50;
         //check to see if the address is long
-      if (width < desiredWidth) {
-           canvas.drawText(domiciliu, z, y, textNormalPaint);
+        if (width < desiredWidth) {
+            canvas.drawText(domiciliu, z, y, textNormalPaint);
         } else {
-           int[] indexes = separateOnTwoRows(domiciliu, desiredWidth, textNormalPaint);
-           canvas.drawText(domiciliu.substring(0, indexes[0]), z, y, textNormalPaint);
-           y = breakLine(y, textNormalPaint, 1f);
-          canvas.drawText(domiciliu.substring(indexes[1]), z, y, textNormalPaint);
-       }
+            int[] indexes = separateOnTwoRows(domiciliu, desiredWidth, textNormalPaint);
+            canvas.drawText(domiciliu.substring(0, indexes[0]), z, y, textNormalPaint);
+            y = breakLine(y, textNormalPaint, 1f);
+            canvas.drawText(domiciliu.substring(indexes[1]), z, y, textNormalPaint);
+        }
         y = breakLine(y, textNormalPaint, 1.8f);
 
         canvas.drawText(RESEDINTA_PDF, x, y, textNormalPaint);
-         width = textNormalPaint.measureText(resedinta);
-         desiredWidth = canvas.getWidth() -z - 50;
+        width = textNormalPaint.measureText(resedinta);
+        desiredWidth = canvas.getWidth() - z - 50;
         //check to see if the address is long
         if (width < desiredWidth) {
             canvas.drawText(resedinta, z, y, textNormalPaint);
@@ -169,7 +171,6 @@ public class Helper {
         y = breakLine(y, textNormalPaint, 3f);
 
 
-
 //        float widthPdfTag = textNormalPaint.measureText(DOMICILIU_PDF);
 
 //        float width = textNormalPaint.measureText(address);
@@ -179,7 +180,7 @@ public class Helper {
 //            canvas.drawText(address, x + widthPdfTag, y, textNormalPaint);
 //        } else {
 //            int[] indexes = separateOnTwoRows(address, desiredWidth, textNormalPaint);
-            //separate it on two rows
+        //separate it on two rows
 
 //            canvas.drawText(address.substring(0, indexes[0]), x + widthPdfTag, y, textNormalPaint);
 //            y = breakLine(y, textNormalPaint, 0.9f);
@@ -190,20 +191,21 @@ public class Helper {
 
 //        Helper pentru motive
         canvas.save();
-       TextPaint mTextPaint;
-       mTextLayout = new StaticLayout(MOTIVE_HELPER_PDF, mTextNormalPaint, canvas.getWidth() - 120, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+        TextPaint mTextPaint;
+        mTextPaint = new TextPaint(textNormalPaint);
+        mTextLayout = new StaticLayout(MOTIVE_HELPER_PDF, mTextPaint, canvas.getWidth() - 120, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.5f, false);
         canvas.translate(x, y);
         mTextLayout.draw(canvas);
         canvas.restore();
 
-               //Helper pentru adresa
+        //Helper pentru adresa
 //        canvas.save();
 //      mTextLayout = new StaticLayout(ADRESA_HELPER_PDF, mTextPaint, canvas.getWidth() - 70, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
 //        canvas.translate(x, y);
 //        mTextLayout.draw(canvas);
 //        canvas.restore();
 
-        y = y + mTextNormalPaint.getTextSize() * 6+ 1f;
+        y = y + mTextNormalPaint.getTextSize() * 6 + 1f;
 //        y = breakLine(y, helperTextPaint, 2.2f);
 
 //        canvas.drawText(LOCUL_DEPLASARII_PDF, x, y, textBoldPaint);
@@ -233,10 +235,10 @@ public class Helper {
 //        y = breakLine(y, helperTextPaint, 2.2f);
 
         //Scrie motivele
-        mTextPaint = new TextPaint(textNormalPaint);
+
         mTextLayout = new StaticLayout(motive, mTextPaint, canvas.getWidth() - 120, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.5f, false);
         canvas.save();
-        canvas.translate(x+16, y);
+        canvas.translate(x + 16, y);
         mTextLayout.draw(canvas);
         canvas.restore();
 
@@ -265,8 +267,7 @@ public class Helper {
         //Semnatura
         x = canvas.getWidth() - 120;
         canvas.drawText(SEMNATURA_PDF, x, y, textNormalPaint);
-        Paint mPaint = new Paint(Paint.FILTER_BITMAP_FLAG);
-        mPaint.setFilterBitmap(true);
+
         if (semnaturaUriString != null) {
             Bitmap bm = null;
             try {
@@ -279,10 +280,9 @@ public class Helper {
                 e.printStackTrace();
             }
             if (bm != null) {
-                bm.setDensity(bm.getDensity() * 4);
+                x-=45;
                 bm.setHasMipMap(true);
-                canvas.drawBitmap(bm, x - 45, y, mPaint);
-                bm.setDensity(560);
+                canvas.drawBitmap(bm, null, new RectF(x, y, x+90, y+40), null);
             }
         }
 
