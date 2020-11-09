@@ -90,6 +90,7 @@ public class Helper {
 
         //text normal
         Paint textNormalPaint = new Paint();
+        TextPaint mTextNormalPaint = new TextPaint(textNormalPaint);
         textNormalPaint.setTypeface(Typeface.SANS_SERIF);
         textNormalPaint.setTextSize(13.5f);
 
@@ -107,13 +108,14 @@ public class Helper {
         Paint helperTextPaint = new Paint();
         helperTextPaint.setTextSize(10f);
 
+        StaticLayout mTextLayout;
 
         Canvas canvas = myPage.getCanvas();
         float y = 95;
         float x = 54;
         float z = x+ textNormalPaint.measureText(RESEDINTA_PDF);
 
-        //draw image
+        //draw image stamp
         Bitmap bim = BitmapFactory.decodeResource(context.getResources(), R.raw.precaut);
         Paint mbPaint = new Paint(Paint.FILTER_BITMAP_FLAG);
         mbPaint.setFilterBitmap(true);
@@ -132,11 +134,33 @@ public class Helper {
         y = breakLine(y, textNormalPaint, 1.8f);
 
         canvas.drawText(DOMICILIU_PDF, x, y, textNormalPaint);
-        canvas.drawText(domiciliu, z, y, textNormalPaint);
+//        canvas.drawText(domiciliu, z, y, textNormalPaint);
+
+         float width = textNormalPaint.measureText(domiciliu);
+        float desiredWidth = canvas.getWidth() -z - 50;
+        //check to see if the address is long
+      if (width < desiredWidth) {
+           canvas.drawText(domiciliu, z, y, textNormalPaint);
+        } else {
+           int[] indexes = separateOnTwoRows(domiciliu, desiredWidth, textNormalPaint);
+           canvas.drawText(domiciliu.substring(0, indexes[0]), z, y, textNormalPaint);
+           y = breakLine(y, textNormalPaint, 1f);
+          canvas.drawText(domiciliu.substring(indexes[1]), z, y, textNormalPaint);
+       }
         y = breakLine(y, textNormalPaint, 1.8f);
 
         canvas.drawText(RESEDINTA_PDF, x, y, textNormalPaint);
-        canvas.drawText(resedinta, z, y, textNormalPaint);
+         width = textNormalPaint.measureText(resedinta);
+         desiredWidth = canvas.getWidth() -z - 50;
+        //check to see if the address is long
+        if (width < desiredWidth) {
+            canvas.drawText(resedinta, z, y, textNormalPaint);
+        } else {
+            int[] indexes = separateOnTwoRows(resedinta, desiredWidth, textNormalPaint);
+            canvas.drawText(resedinta.substring(0, indexes[0]), z, y, textNormalPaint);
+            y = breakLine(y, textNormalPaint, 1f);
+            canvas.drawText(resedinta.substring(indexes[1]), z, y, textNormalPaint);
+        }
         y = breakLine(y, textNormalPaint, 1.8f);
 
         canvas.drawText(DATA_NASTERII_PDF, x, y, textNormalPaint);
@@ -144,7 +168,7 @@ public class Helper {
         canvas.drawText(localitate, x + textNormalPaint.measureText(DATA_NASTERII_PDF), y, textNormalPaint);
         y = breakLine(y, textNormalPaint, 3f);
 
-        StaticLayout mTextLayout;
+
 
 //        float widthPdfTag = textNormalPaint.measureText(DOMICILIU_PDF);
 
@@ -167,7 +191,6 @@ public class Helper {
 //        Helper pentru motive
         canvas.save();
        TextPaint mTextPaint;
-        TextPaint mTextNormalPaint = new TextPaint(textNormalPaint);
        mTextLayout = new StaticLayout(MOTIVE_HELPER_PDF, mTextNormalPaint, canvas.getWidth() - 120, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
         canvas.translate(x, y);
         mTextLayout.draw(canvas);
@@ -211,7 +234,7 @@ public class Helper {
 
         //Scrie motivele
         mTextPaint = new TextPaint(textNormalPaint);
-        mTextLayout = new StaticLayout(motive, mTextPaint, canvas.getWidth() - 100, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.5f, false);
+        mTextLayout = new StaticLayout(motive, mTextPaint, canvas.getWidth() - 120, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.5f, false);
         canvas.save();
         canvas.translate(x+16, y);
         mTextLayout.draw(canvas);
@@ -296,6 +319,7 @@ public class Helper {
         myPdfDocument.close();
         return true;
     }
+
     private static float breakLine(float y, Paint paint, float howMany) {
         return y += (paint.descent() - paint.ascent()) * howMany;
     }
