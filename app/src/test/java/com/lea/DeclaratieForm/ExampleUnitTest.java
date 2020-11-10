@@ -1,4 +1,4 @@
-package com.lea.Declaratie;
+package com.lea.DeclaratieForm;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package com.lea.Declaratie;
+package com.lea.DeclaratieForm;
 
 import android.app.AlertDialog;
 import android.app.DialogFragment;

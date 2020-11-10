@@ -1,4 +1,4 @@
-package com.lea.Declaratie;
+package com.lea.DeclaratieForm;
 
 import android.content.Context;
 import android.graphics.Bitmap;

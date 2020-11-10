@@ -1,4 +1,4 @@
-package com.lea.Declaratie;
+package com.lea.DeclaratieForm;
 
 import android.content.Context;
 
@@ -22,6 +22,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-        assertEquals("com.lea.Declaratie", appContext.getPackageName());
+        assertEquals("com.lea.DeclaratieForm", appContext.getPackageName());
     }
 }

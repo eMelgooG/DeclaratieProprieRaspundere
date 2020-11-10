@@ -1,4 +1,4 @@
-package com.lea.Declaratie;
+package com.lea.DeclaratieForm;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        sharedPreferences = this.getSharedPreferences("com.lea.Declaratie", Context.MODE_PRIVATE);
+        sharedPreferences = this.getSharedPreferences("com.lea.DeclaratieForm", Context.MODE_PRIVATE);
 
         //Initialize text inputs
         localitateaTextInput = findViewById(R.id.localitateaTF);
