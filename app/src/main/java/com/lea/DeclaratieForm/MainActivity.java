@@ -286,9 +286,8 @@ public class MainActivity extends AppCompatActivity {
                                 if (checkedItems[0] == true && !isExpanded) {
                                     Helper.hideShowViews(companieTextInput, sediulTextInput, adresa1TextInput, adresa2TextInput, View.VISIBLE, (ConstraintLayout) findViewById(R.id.nestedConstraintLayout), (NestedScrollView) findViewById(R.id.nestedScrollView));
                                     isExpanded = true;
-
                                 } else if (isExpanded && checkedItems[0] == false) {
-                                    Helper.hideShowViews(companieTextInput, sediulTextInput, adresa1TextInput, adresa2TextInput, View.INVISIBLE, (ConstraintLayout) findViewById(R.id.nestedConstraintLayout), (NestedScrollView) findViewById(R.id.nestedScrollView));
+                                    Helper.hideShowViews(companieTextInput, sediulTextInput, adresa1TextInput, adresa2TextInput, View.GONE, (ConstraintLayout) findViewById(R.id.nestedConstraintLayout), (NestedScrollView) findViewById(R.id.nestedScrollView));
                                     isExpanded = false;
                                 }
                                 return;
@@ -298,10 +297,8 @@ public class MainActivity extends AppCompatActivity {
                             motivDeplasareTint = 0;
                         }
                         if (isExpanded && checkedItems[0] == false) {
-                            Helper.hideShowViews(companieTextInput, sediulTextInput, adresa1TextInput, adresa2TextInput, View.INVISIBLE, (ConstraintLayout) findViewById(R.id.nestedConstraintLayout), (NestedScrollView) findViewById(R.id.nestedScrollView));
+                            Helper.hideShowViews(companieTextInput, sediulTextInput, adresa1TextInput, adresa2TextInput, View.GONE, (ConstraintLayout) findViewById(R.id.nestedConstraintLayout), (NestedScrollView) findViewById(R.id.nestedScrollView));
                             ConstraintLayout cl = findViewById(R.id.constraintLayout);
-                            NestedScrollView scrollView = findViewById(R.id.nestedScrollView);
-                            scrollView.scrollTo(0, 0);
                             isExpanded = false;
                         }
                     }

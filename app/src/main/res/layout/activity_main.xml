@@ -23,17 +23,15 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+         android:layout_height="0dp"
         android:layout_marginBottom="30dp"
         app:layout_constraintTop_toBottomOf="@id/titluTV"
         app:layout_constraintBottom_toTopOf="@+id/geneatePdfButon"
-        android:fillViewport="true"
         android:id="@+id/nestedScrollView"
         >
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="30dp"
+            android:layout_height="match_parent"
             android:id="@+id/nestedConstraintLayout"
             >
 
@@ -253,7 +251,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="@dimen/margin_regular_textfield"
         android:hint="* numele companiei (ex: Amazon SRL)"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:endIconMode="clear_text"
         android:textColorHint="@color/gray"
         app:boxBackgroundColor="#F3F5F6"
@@ -279,7 +277,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="@dimen/margin_regular_textfield"
         android:hint="* cu sediul în (oraș): "
-        android:visibility="invisible"
+        android:visibility="gone"
         app:endIconMode="clear_text"
         android:textColorHint="@color/gray"
         app:boxBackgroundColor="#F3F5F6"
@@ -305,7 +303,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="@dimen/margin_regular_textfield"
         android:hint="* adresa 1:"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:endIconMode="clear_text"
         android:textColorHint="@color/gray"
         app:boxBackgroundColor="#F3F5F6"
@@ -331,7 +329,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="@dimen/margin_regular_textfield"
         android:hint="adresa 2:"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:endIconMode="clear_text"
         android:textColorHint="@color/gray"
         app:boxBackgroundColor="#F3F5F6"
@@ -397,7 +395,7 @@
         android:layout_height="34dp"
         android:layout_marginTop="16dp"
         android:scaleType="fitXY"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:layout_constraintLeft_toLeftOf="@id/semnaturaButon"
         app:layout_constraintTop_toTopOf="@id/semnaturaButon" />
 

@@ -13,6 +13,8 @@ import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.view.View;
+import android.widget.ScrollView;
+
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.widget.NestedScrollView;
@@ -54,7 +56,6 @@ public class Helper {
     static void hideShowViews(TextInputLayout comp, TextInputLayout sediul, TextInputLayout adr1, TextInputLayout adr2, int view, ConstraintLayout cl, NestedScrollView scrollView) {
         ConstraintSet cs = new ConstraintSet();
         cs.clone(cl);
-
         if (view == View.VISIBLE) {
             int idCompanie = comp.getId();
             cs.connect(idCompanie, ConstraintSet.TOP, R.id.localitateaTF, ConstraintSet.BOTTOM);
@@ -62,7 +63,6 @@ public class Helper {
             cs.connect(R.id.dataTF, ConstraintSet.TOP, adr2.getId(), ConstraintSet.BOTTOM);
         } else {
             cs.connect(R.id.dataTF, ConstraintSet.TOP, R.id.localitateaTF, ConstraintSet.BOTTOM);
-            scrollView.smoothScrollTo(0, 1500);
         }
         cs.applyTo(cl);
         comp.setVisibility(view);
